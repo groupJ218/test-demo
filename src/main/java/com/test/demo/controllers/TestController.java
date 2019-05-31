@@ -1,5 +1,6 @@
-package com.test.demo;
+package com.test.demo.controllers;
 
+import com.test.demo.models.Widget;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
