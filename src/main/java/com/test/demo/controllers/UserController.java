@@ -1,9 +1,13 @@
 package com.test.demo.controllers;
 
+import com.test.demo.models.User;
+import com.test.demo.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,28 +22,33 @@ public class UserController {
     // Displaying the initial users list.
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String getPersons(Model model) {
+        System.out.println("list url");
         List user_list = userService.getAll();
         model.addAttribute("users", user_list);
-        return "welcome";
+        System.out.println(user_list.toString());
+        return "index";
     }
 
     // Opening the add new user form page.
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addUser(Model model) {
+        System.out.println("add url");
         model.addAttribute("userAttr", new User());
-        return "form";
+        return "index";
     }
 
     // Opening the edit user form page.
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editUser(@RequestParam(value="id", required=true) String id, Model model) {
+        System.out.println("edit url");
         model.addAttribute("userAttr", userService.findUserId(id));
-        return "form";
+        return "index";
     }
 
     // Deleting the specified user.
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(@RequestParam(value="id", required=true) String id, Model model) {
+        System.out.println("delete URL");
         userService.delete(id);
         return "redirect:list";
     }
