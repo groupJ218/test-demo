@@ -126,18 +126,18 @@ public class CommentService {
         MongoCollection coll = MongoFactory.getCollection(db_collection);
 
         // Fetching the record object from the mongo database.
-        Document where_query =new Document();
+        Document where_query = new Document();
         //        where_query.put("idComment", idComment);
 
         Document dbo = (Document) coll.find(eq("idComment", idComment)).first();
-         System.out.println(dbo.toString());
+        System.out.println(dbo.toString());
         c.setIdComment(Long.parseLong(dbo.get("idComment").toString()));
         c.setIdUser(Long.parseLong(dbo.get("idUser").toString()));
         c.setIdGalEnt(Long.parseLong(dbo.get("idGalEnt").toString()));
         c.setText(dbo.get("text").toString());
         c.setDate(dbo.get("date").toString());
-        c.setIdAnsCommentId(Long.parseLong((dbo.get("IdAnsCommentId").toString())));
-
+        if (dbo.get("IdAnsCommentId") != null)
+            c.setIdAnsCommentId(Long.parseLong((dbo.get("IdAnsCommentId").toString())));
         // Return comment object.
         return c;
     }

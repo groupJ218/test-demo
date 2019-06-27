@@ -41,6 +41,7 @@ public class CommentController {
     // Opening the edit comment form page.
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
 public  String editComment (@RequestParam(value= "id", required = true)String id, Model model){
+
         System.out.println("edit comment url");
         model.addAttribute("commentAtttr", String.valueOf(commentService.findCommentId(id)));
         return "index";
