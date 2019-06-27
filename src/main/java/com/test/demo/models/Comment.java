@@ -9,6 +9,7 @@ import java.util.Date;
 public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
 
+
     private long idComment;
     private long idUser;
     private long idGalEnt;
