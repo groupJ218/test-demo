@@ -10,18 +10,18 @@ public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private long idComment;
-    private long idUser;
-    private long idGalEnt;
+    private String idComment;
+    private String idUser;
+    private String idGalEnt;
     private String text;
     private Date date;
-    private ArrayList<Long> idAnsCommentId;
+    private ArrayList<String> idAnsCommentId;
 
     public Comment() {
         super();
     }
 
-    public Comment(long idComment, long idUser, long idGalEnt, String text, Date date) {
+    public Comment(String idComment, String idUser, String idGalEnt, String text, Date date) {
         this.idComment = idComment;
         this.idUser = idUser;
         this.idGalEnt = idGalEnt;
@@ -33,27 +33,27 @@ public class Comment implements Serializable {
         return serialVersionUID;
     }
 
-    public long getIdComment() {
+    public String getIdComment() {
         return idComment;
     }
 
-    public void setIdComment(long idComment) {
+    public void setIdComment(String idComment) {
         this.idComment = idComment;
     }
 
-    public long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 
-    public long getIdGalEnt() {
+    public String getIdGalEnt() {
         return idGalEnt;
     }
 
-    public void setIdGalEnt(long idGalEnt) {
+    public void setIdGalEnt(String idGalEnt) {
         this.idGalEnt = idGalEnt;
     }
 
@@ -80,11 +80,11 @@ public class Comment implements Serializable {
         }
     }
 
-    public ArrayList<Long> getIdAnsCommentId() {
+    public ArrayList<String> getIdAnsCommentId() {
         return idAnsCommentId;
     }
 
-    public void setIdAnsCommentId(long idAnsCommentId) {
+    public void setIdAnsCommentId(String idAnsCommentId) {
 
         if (this.idAnsCommentId == null) {
             this.idAnsCommentId = new ArrayList<>();

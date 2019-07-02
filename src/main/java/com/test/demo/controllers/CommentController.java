@@ -22,7 +22,7 @@ public class CommentController {
 
     // Displaying the initial comment list.
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String getComment (Model model){
+    public String getComment(Model model) {
         System.out.println("list comment url ");
         List comment_list = commentService.getAll();
         model.addAttribute("comment", comment_list);
@@ -40,16 +40,16 @@ public class CommentController {
 
     // Opening the edit comment form page.
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-public  String editComment (@RequestParam(value= "id", required = true)String id, Model model){
+    public String editComment(@RequestParam(value = "id", required = true) String id, Model model) {
 
         System.out.println("edit comment url");
-        model.addAttribute("commentAtttr", String.valueOf(commentService.findCommentId(id)));
+        model.addAttribute("commentAttr", commentService.findCommentId(id));
         return "index";
     }
 
     // Deleting the specified comment.
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@RequestParam(value="id", required=true) String id, Model model) {
+    public String delete(@RequestParam(value = "id", required = true) String id, Model model) {
         System.out.println("delete comment URL");
         commentService.deleteComment(id);
         return "redirect:list";
@@ -57,20 +57,14 @@ public  String editComment (@RequestParam(value= "id", required = true)String id
 
     // Adding a new user or updating an existing user.
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveComment (@ModelAttribute("commentAttr") Comment comment){
-        if ( (!(String.valueOf(comment.getIdComment()).trim().equals(""))) && (String.valueOf(comment.getIdComment()) !=null)){
+    public String saveComment(@ModelAttribute("commentAttr") Comment comment) {
+        if (comment.getIdComment() != null && !comment.getIdComment().trim().equals("")) {
             commentService.editComment(comment);
         } else {
             commentService.addComment(comment);
         }
         return "redirect:list";
     }
-
-
-
-
-
-
 
 
 }

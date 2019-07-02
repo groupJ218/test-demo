@@ -32,12 +32,12 @@ public class CommentService {
         while (cursor.hasNext()) {
             Document document = cursor.next();
             Comment comment = new Comment();
-            comment.setIdComment(Long.parseLong((document.getLong(("idComment")).toString())));
-            comment.setIdUser(Long.parseLong((document.getLong(("idUser")).toString())));
-            comment.setIdGalEnt(Long.parseLong((document.getLong(("idGalEnt")).toString())));
+            comment.setIdComment(document.get(("idComment")).toString());
+            comment.setIdUser(document.get(("idUser")).toString());
+            comment.setIdGalEnt(document.get(("idGalEnt")).toString());
             comment.setText(document.get("text").toString());
             comment.setDate(document.get("date").toString());
-            comment.setIdAnsCommentId(Long.parseLong((document.getLong(("idAnsCommentId")).toString())));
+            comment.setIdAnsCommentId(document.get(("idAnsCommentId")).toString());
         }
         return comment_list;
     }
@@ -131,13 +131,13 @@ public class CommentService {
 
         Document dbo = (Document) coll.find(eq("idComment", idComment)).first();
         System.out.println(dbo.toString());
-        c.setIdComment(Long.parseLong(dbo.get("idComment").toString()));
-        c.setIdUser(Long.parseLong(dbo.get("idUser").toString()));
-        c.setIdGalEnt(Long.parseLong(dbo.get("idGalEnt").toString()));
+        c.setIdComment(dbo.get("idComment").toString());
+        c.setIdUser(dbo.get("idUser").toString());
+        c.setIdGalEnt(dbo.get("idGalEnt").toString());
         c.setText(dbo.get("text").toString());
         c.setDate(dbo.get("date").toString());
         if (dbo.get("IdAnsCommentId") != null)
-            c.setIdAnsCommentId(Long.parseLong((dbo.get("IdAnsCommentId").toString())));
+            c.setIdAnsCommentId((dbo.get("IdAnsCommentId").toString()));
         // Return comment object.
         return c;
     }
