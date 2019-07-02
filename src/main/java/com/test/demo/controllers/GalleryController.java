@@ -1,9 +1,7 @@
 package com.test.demo.controllers;
 
-
-
-import com.test.demo.models.User;
-import com.test.demo.services.UserService;
+import com.test.demo.models.GalleryEntity;
+import com.test.demo.services.GalleryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,17 +16,16 @@ import java.util.List;
 @RequestMapping("/gallery")
 public class GalleryController {
 
-    @Resource(name="")
-    private GalleryController  galleryController;
+    @Resource(name="GalleryService")
+    private GalleryService galleryService;
 
     // Displaying the initial users list.
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String getPersons(Model model) {
         System.out.println("list url");
-        List user_list = galleryController.getAll();
-        Object g_list;
+        List g_list = galleryService.getAll();
         model.addAttribute("gall", g_list);
-        System.out.println(user_list.toString());
+        System.out.println(g_list.toString());
         return "index";
     }
 
@@ -36,7 +33,7 @@ public class GalleryController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addUser(Model model) {
         System.out.println("add url");
-        model.addAttribute("userAttr", new User());
+        model.addAttribute("userAttr", new GalleryEntity());
         return "index";
     }
 
@@ -44,7 +41,7 @@ public class GalleryController {
     @RequestMapping(value = "/edit ", method = RequestMethod.GET)
     public String editUser(@RequestParam(value="id", required=true) String id, Model model) {
         System.out.println("edit url");
-        model.addAttribute("userAttr", galleryController.findUserId(id));
+        model.addAttribute("userAttr", galleryService.findGalleryId(id));
         return "index";
     }
 
@@ -52,17 +49,17 @@ public class GalleryController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(@RequestParam(value="id", required=true) String id, Model model) {
         System.out.println("delete URL");
-        galleryController.delete(id);
+        galleryService.delete(id);
         return "redirect:list";
     }
 
     // Adding a new user or updating an existing user.
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@ModelAttribute("galleryAttr") User user) {
-        if(galleryController.getId() != null && !user.getId().trim().equals("")) {
-            galleryControllere.edit(user);
+    public String save(@ModelAttribute("galleryAttr") GalleryEntity entity) {
+        if(entity.getId() != null && !entity.getId().trim().equals("")) {
+            galleryService.edit(entity);
         } else {
-            galleryController.add(user);
+            galleryService.add(entity);
         }
         return "redirect:list";
     }
