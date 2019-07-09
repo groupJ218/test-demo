@@ -39,6 +39,7 @@ public class GalleryController {
         return "index";
     }
 
+
     // Opening the edit gallery form page.
     @RequestMapping(value = "/edit ", method = RequestMethod.GET)
     public String editGall(@RequestParam(value="id", required=true) String id, Model model) {

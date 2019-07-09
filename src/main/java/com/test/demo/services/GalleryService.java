@@ -44,6 +44,7 @@ public class GalleryService {
         return gallery_list;
     }
 
+
     public Boolean addGall ( GalleryEntity galleryEntity ) {
         boolean output = false;
         Random ran = new Random ( );
