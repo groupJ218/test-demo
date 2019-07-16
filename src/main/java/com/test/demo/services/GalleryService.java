@@ -120,13 +120,13 @@ public class GalleryService {
         MongoCollection coll = MongoFactory.getCollection (db_collection);
 
         Document where_query = new Document ();
-        Document dbo = (Document) coll.find (eq("id",g)).first ();
+        Document dbo = (Document) coll.find (eq("id",id)).first ();
         System.out.println (dbo.toString ());
         g.setId (dbo.get ("id").toString ());
-        g.setFile (dbo.get ("file").toString ().getBytes ());
+//        g.setFile (dbo.get ("file").toString ().getBytes ());
         g.setName (dbo.get ("name").toString ());
         g.setDescription (dbo.get ("description").toString ());
-        g.setUserId (dbo.get ("user").toString ());
+        g.setUserId (dbo.get ("userId").toString ());
 
         return g;
 
