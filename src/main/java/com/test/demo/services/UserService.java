@@ -53,6 +53,9 @@ public class UserService {
             Document doc = new Document();
             doc.put("id", String.valueOf(ran.nextInt(100)));
             doc.put("name", user.getName());
+            doc.put("phone", user.getPhone());
+            doc.put("email", user.getEmail());
+            doc.put("status", user.getStatus());
 
             // Save a new user to the mongo collection.
             coll.insertOne(doc);
@@ -82,6 +85,9 @@ public class UserService {
             Document edited = new Document();
             edited.put("id", user.getId());
             edited.put("name", user.getName());
+            edited.put("phone", user.getPhone());
+            edited.put("email", user.getEmail());
+            edited.put("status", user.getStatus());
 
             // Update the existing user to the mongo database.
             coll.replaceOne(eq("id", user.getId()), edited);
@@ -135,7 +141,9 @@ public class UserService {
         System.out.println(dbo.toString());
         u.setId(dbo.get("id").toString());
         u.setName(dbo.get("name").toString());
-
+        u.setPhone(dbo.get("phone").toString());
+        u.setEmail(dbo.get("email").toString());
+        u.setStatus(dbo.get("status").toString());
         // Return user object.
         return u;
     }
