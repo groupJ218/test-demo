@@ -1,5 +1,6 @@
 package com.test.demo.controllers;
 
+import com.google.gson.Gson;
 import com.test.demo.models.User;
 import com.test.demo.services.UserService;
 import org.springframework.stereotype.Controller;
@@ -10,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    private Gson gson = new Gson();
 
     @Resource(name="UserService")
     private UserService userService;
@@ -26,7 +30,9 @@ public class UserController {
         List user_list = userService.getAll();
         model.addAttribute("users", user_list);
         System.out.println(user_list.toString());
-        return "index";
+        String userListString = this.gson.toJson(user_list);
+        System.out.println(userListString);
+        return userListString;
     }
 
     // Opening the add new user form page.

@@ -20,7 +20,7 @@ public class MongoFactory {
         MongoDatabase db = null;
         try {
 
-            MongoClientURI uri = new MongoClientURI("mongodb://test123:test123@ds161136.mlab.com:61136/mydb");
+            MongoClientURI uri = new MongoClientURI("mongodb://127.0.0.1:27017/mydb");
             MongoClient client = new MongoClient(uri);
             db = client.getDatabase(uri.getDatabase());
 
