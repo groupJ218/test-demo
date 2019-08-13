@@ -88,16 +88,15 @@ public class CommentService {
             // Create a new object and assign the updated details.
 
             Document edited = new Document();
-            edited.put("id", comment.getIdComment());
+            edited.put("idComment", comment.getIdComment());
             edited.put("idUser", comment.getIdUser());
             edited.put("idGalEnt", comment.getIdGalEnt());
             edited.put("text", comment.getText());
             edited.put("date", comment.getDate());
             edited.put("idAnsCommentId", comment.getIdAnsCommentId());
 
-
             // Update the existing comment to the mongo database.
-            coll.replaceOne(eq("id", comment.getIdComment()), edited);
+            coll.replaceOne(eq("idComment", comment.getIdComment()), edited);
             coll.replaceOne(eq("idUser", comment.getIdUser()), edited);
             coll.replaceOne(eq("idGalEnt", comment.getIdGalEnt()), edited);
             coll.replaceOne(eq("text", comment.getText()), edited);

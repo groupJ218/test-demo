@@ -28,7 +28,6 @@ public class CommentController {
         List comment_list = commentService.getAll();
         ObjectMapper mapper = new ObjectMapper();
         String commentListJson = null;
-
         try {
             commentListJson = mapper.writeValueAsString(comment_list);
 
@@ -63,40 +62,36 @@ public class CommentController {
     // Opening the edit comment form page.
     @RequestMapping(value = "/edit/{idComment}/{text}", method = RequestMethod.GET)
     public String editComment(@PathVariable String idComment, @PathVariable String text) {
-        Comment tmpСomment = new Comment();
-        log.warning("edit comment " + idComment);
-        commentService.findCommentId(idComment);
-        if (tmpСomment != null) {
-
-            tmpСomment.setText(text);
-            tmpСomment.setDate(new Date().toString());
+        log.warning("edit comment " + idComment + ", text: "+ text);
+        Comment comment = commentService.findCommentId(idComment);
+        if (comment != null) {
+            comment.setText(text);
+            comment.setDate(new Date().toString());
+            commentService.editComment(comment);
+            log.info("!!!!!!!!Success update comment with id {" + comment.toString()+ "}");
         }
-        commentService.editComment(tmpСomment);
-        return "redirect:comment/list";
+        return "redirect:/comment/list";
     }
 
     // Deleting the specified comment.
     @RequestMapping(value = "/delete/{idComment}", method = RequestMethod.GET)
     public String delete(@PathVariable String idComment) {
-        log.warning("delete comment");
-        Comment comment = new Comment();
-        commentService.findCommentId(idComment);
-
-        if (comment == null) {
-            log.warning("Unable to delete. Comment with id {" + idComment + "} not found.");
+        log.info("delete comment");
+        Comment comment = commentService.findCommentId(idComment);
+        if (comment != null) {
+            commentService.deleteComment(idComment);
+            log.info("Success delete comment with id {" + idComment + "}");
+        } else {
+        log.warning("Unable to delete. Comment with id {" + idComment + "} not found.");
         }
-
-        commentService.deleteComment(idComment);
-        return "redirect:/../list";
+        return "redirect:/comment/list";
     }
 
     @RequestMapping(value = "/one_comment/{idComment}", method = RequestMethod.GET)
     public String getCommentById(Model model, @PathVariable String idComment) {
-
         Comment comment = commentService.findCommentId(idComment);
         String commentJson = null;
         ObjectMapper m = new ObjectMapper();
-
         try {
             commentJson = m.writeValueAsString(comment);
         } catch (JsonProcessingException ex) {
@@ -106,24 +101,4 @@ public class CommentController {
         log.warning("Comments: " + comment.toString());
         return "comment";
     }
-    //    // Adding a new user or updating an existing user.
-//    @RequestMapping(value = "/save", method = RequestMethod.POST)
-//    public String saveComment(@ModelAttribute("commentAttr") Comment comment) {
-//        if (comment.getIdComment() != null && !comment.getIdComment().trim().equals("")) {
-//            commentService.editComment(comment);
-//        } else {
-//            commentService.addComment(comment);
-//        }
-//        return "redirect:list";
-//    }
-
-//    @RequestMapping(value = "/comment/{idComment}", method = RequestMethod.GET)
-//    public Comment getOneComment(@PathVariable String idComment) {
-//        Comment comment = new Comment();
-//        comment = commentService.findCommentId(idComment);
-//        if (comment == null) {
-//
-//            throw new NullPointerException();
-//        }
-//        return comment;
 }
