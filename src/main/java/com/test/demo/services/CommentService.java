@@ -12,19 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.logging.Logger;
 
 import static com.mongodb.client.model.Filters.eq;
 
 @Service("CommentService")
 @Transactional
 public class CommentService {
-
+    Logger log = Logger.getLogger(CommentService.class.getName());
     static String db_collection = "mycollection";
 
     // Fetch all comments from the mongo database.
     public List getAll() {
-        List comment_list = new ArrayList();
+        List<Comment> comment_list = new ArrayList();
         MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
 
         // Fetching cursor object for iterating on the database records.
@@ -32,12 +32,20 @@ public class CommentService {
         while (cursor.hasNext()) {
             Document document = cursor.next();
             Comment comment = new Comment();
-            comment.setIdComment(document.get(("idComment")).toString());
-            comment.setIdUser(document.get(("idUser")).toString());
-            comment.setIdGalEnt(document.get(("idGalEnt")).toString());
-            comment.setText(document.get("text").toString());
-            comment.setDate(document.get("date").toString());
-            comment.setIdAnsCommentId(document.get(("idAnsCommentId")).toString());
+            if (!document.isEmpty() && document.get("idComment") != null) {
+                log.warning(document.toString());
+                comment.setIdComment(document.get(("idComment")).toString());
+                comment.setIdUser(document.get(("idUser")).toString());
+                comment.setIdGalEnt(document.get(("idGalEnt")).toString());
+                comment.setText(document.get("text").toString());
+                comment.setDate(document.get("date").toString());
+                if (document.get("idAnsCommentId") == null) {
+                    comment.setIdAnsCommentId("");
+                } else {
+                    comment.setIdAnsCommentId(document.get("idAnsCommentId").toString());
+                }
+                comment_list.add(comment);
+            }
         }
         return comment_list;
     }
@@ -45,11 +53,10 @@ public class CommentService {
     // Add a new comment to the mongo database.
 
     public Boolean addComment(Comment comment) {
-        boolean output = false;
-        Random ran = new Random();
+        boolean output;
         try {
             MongoCollection coll = MongoFactory.getCollection(db_collection);
-
+            log.warning("add Comment to mongo DB");
             // Create a new object and add the new comment details to this object.
             Document doc = new Document();
             doc.put("idComment", comment.getIdComment());

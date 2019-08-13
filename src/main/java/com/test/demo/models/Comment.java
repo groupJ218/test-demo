@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -18,7 +19,7 @@ public class Comment implements Serializable {
     private ArrayList<String> idAnsCommentId;
 
     public Comment() {
-        super();
+        this.idComment = String.valueOf(UUID.randomUUID());
     }
 
     public Comment(String idComment, String idUser, String idGalEnt, String text, Date date) {

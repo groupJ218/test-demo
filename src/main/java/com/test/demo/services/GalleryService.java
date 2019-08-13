@@ -13,13 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import static com.mongodb.client.model.Filters.eq;
 
 @Service("GalleryService")
 @Transactional
 public class GalleryService {
-
+    Logger log = Logger.getLogger(CommentService.class.getName());
     static String db_collection = "mycollection";
 
     //Fetch all galleryEntity from the mongo database.
@@ -31,15 +32,24 @@ public class GalleryService {
         MongoCursor<Document> cursor = coll.find ( ).iterator ( );
         while (cursor.hasNext ( )) {
             Document document = cursor.next ( );
-
             GalleryEntity galleryEntity = new GalleryEntity ( );
-            galleryEntity.setId (document.get ("id").toString ( ));
-            galleryEntity.setName (document.get ("name").toString ( ));
-            galleryEntity.setFile (document.get ("file").toString ( ).getBytes ( ));
-            galleryEntity.setDescription (document.get ("description").toString ( ));
-            galleryEntity.setUserId (document.get ("userId").toString ( ));
-            gallery_list.add (galleryEntity);
 
+            if (!document.isEmpty() && document.get("id") != null) {
+                log.warning(document.toString());
+
+                galleryEntity.setId(document.get("id").toString());
+                galleryEntity.setName(document.get("name").toString());
+//                galleryEntity.setFile(document.get("file").toString().getBytes());
+                galleryEntity.setDescription(document.get("description").toString());
+                galleryEntity.setUserId(document.get("userId").toString());
+
+                if (document.get("file")==null){
+                    galleryEntity.setFile(null);
+                }else {
+                    galleryEntity.setFile(document.get("file").toString().getBytes());
+                }
+                gallery_list.add(galleryEntity);
+            }
         }
         return gallery_list;
     }

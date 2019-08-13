@@ -1,70 +1,129 @@
 package com.test.demo.controllers;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.demo.models.Comment;
 import com.test.demo.services.CommentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/comment")
 public class CommentController {
 
+    Logger log = Logger.getLogger(CommentController.class.getName());
     @Resource(name = "CommentService")
     private CommentService commentService;
 
     // Displaying the initial comment list.
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String getComment(Model model) {
-        System.out.println("list comment url ");
+        log.warning("---------------------------LIST-Comment-START-Controller---------------------------------");
         List comment_list = commentService.getAll();
-        model.addAttribute("comment", comment_list);
-        System.out.println(comment_list.toString());
-        return "index";
+        ObjectMapper mapper = new ObjectMapper();
+        String commentListJson = null;
+
+        try {
+            commentListJson = mapper.writeValueAsString(comment_list);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("comments", commentListJson);
+        log.warning("Comments: " + comment_list.toString());
+        log.warning("---------------------------LIST-Comment-END-Controller---------------------------------");
+        return "comment";
     }
 
     // Opening the add new comment form page.
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String addComment(Model model) {
-        System.out.println("add comment url");
-        model.addAttribute("commentAttr", new Comment());
-        return "index";
+    @RequestMapping(value = "/add/{idUser}/{idGalEnt}/{text}/{idAnsCommentId}", method = RequestMethod.GET)
+    public String addComment(Model model, @PathVariable String idUser, @PathVariable String idGalEnt,
+                             @PathVariable String text, @PathVariable String idAnsCommentId) {
+        log.warning("---------------------------ADD-Comment-START-Controller---------------------------------");
+        log.warning("add comment method: idUser " + idUser + ", idGalEntity " + idGalEnt +
+                ", text " + text.isEmpty() + ", idAnsCommentId " + idAnsCommentId);
+
+        Comment comment = new Comment();
+        comment.setIdUser(idUser);
+        comment.setIdGalEnt(idGalEnt);
+        comment.setText(text);
+        comment.setIdAnsCommentId(idAnsCommentId);
+        comment.setDate(new Date().toString());
+        commentService.addComment(comment);
+        log.warning("---------------------------ADD-Comment-END-Controller---------------------------------");
+        return "redirect:/comment/list";
     }
 
     // Opening the edit comment form page.
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editComment(@RequestParam(value = "id", required = true) String id, Model model) {
+    @RequestMapping(value = "/edit/{idComment}/{text}", method = RequestMethod.GET)
+    public String editComment(@PathVariable String idComment, @PathVariable String text) {
+        Comment tmpСomment = new Comment();
+        log.warning("edit comment " + idComment);
+        commentService.findCommentId(idComment);
+        if (tmpСomment != null) {
 
-        System.out.println("edit comment url");
-        model.addAttribute("commentAttr", commentService.findCommentId(id));
-        return "index";
+            tmpСomment.setText(text);
+            tmpСomment.setDate(new Date().toString());
+        }
+        commentService.editComment(tmpСomment);
+        return "redirect:comment/list";
     }
 
     // Deleting the specified comment.
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@RequestParam(value = "id", required = true) String id, Model model) {
-        System.out.println("delete comment URL");
-        commentService.deleteComment(id);
-        return "redirect:list";
-    }
+    @RequestMapping(value = "/delete/{idComment}", method = RequestMethod.GET)
+    public String delete(@PathVariable String idComment) {
+        log.warning("delete comment");
+        Comment comment = new Comment();
+        commentService.findCommentId(idComment);
 
-    // Adding a new user or updating an existing user.
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveComment(@ModelAttribute("commentAttr") Comment comment) {
-        if (comment.getIdComment() != null && !comment.getIdComment().trim().equals("")) {
-            commentService.editComment(comment);
-        } else {
-            commentService.addComment(comment);
+        if (comment == null) {
+            log.warning("Unable to delete. Comment with id {" + idComment + "} not found.");
         }
-        return "redirect:list";
+
+        commentService.deleteComment(idComment);
+        return "redirect:/../list";
     }
 
+    @RequestMapping(value = "/one_comment/{idComment}", method = RequestMethod.GET)
+    public String getCommentById(Model model, @PathVariable String idComment) {
 
+        Comment comment = commentService.findCommentId(idComment);
+        String commentJson = null;
+        ObjectMapper m = new ObjectMapper();
+
+        try {
+            commentJson = m.writeValueAsString(comment);
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+        model.addAttribute("comments", commentJson);
+        log.warning("Comments: " + comment.toString());
+        return "comment";
+    }
+    //    // Adding a new user or updating an existing user.
+//    @RequestMapping(value = "/save", method = RequestMethod.POST)
+//    public String saveComment(@ModelAttribute("commentAttr") Comment comment) {
+//        if (comment.getIdComment() != null && !comment.getIdComment().trim().equals("")) {
+//            commentService.editComment(comment);
+//        } else {
+//            commentService.addComment(comment);
+//        }
+//        return "redirect:list";
+//    }
+
+//    @RequestMapping(value = "/comment/{idComment}", method = RequestMethod.GET)
+//    public Comment getOneComment(@PathVariable String idComment) {
+//        Comment comment = new Comment();
+//        comment = commentService.findCommentId(idComment);
+//        if (comment == null) {
+//
+//            throw new NullPointerException();
+//        }
+//        return comment;
 }
