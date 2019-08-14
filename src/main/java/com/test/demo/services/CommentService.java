@@ -35,8 +35,8 @@ public class CommentService {
             if (!document.isEmpty() && document.get("idComment") != null) {
                 log.warning(document.toString());
                 comment.setIdComment(document.get(("idComment")).toString());
-                comment.setIdUser(document.get(("idUser")).toString());
-                comment.setIdGalEnt(document.get(("idGalEnt")).toString());
+                comment.setIdUser(null == document.get("idUser") ? "" : document.get("idUser").toString());
+                comment.setIdGalEnt(null == document.get("idGalEnt") ? "" : document.get("idGalEnt").toString());
                 comment.setText(document.get("text").toString());
                 comment.setDate(document.get("date").toString());
                 if (document.get("idAnsCommentId") == null) {
