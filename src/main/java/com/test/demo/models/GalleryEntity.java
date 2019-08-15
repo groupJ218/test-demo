@@ -2,40 +2,41 @@ package com.test.demo.models;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.UUID;
 
 
 public class GalleryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private String idGalEnt;
     private byte[] file;
     private String name;
     private String description;
-    private String userId;
+    private String idUser;
 
     public GalleryEntity () {
-        super ( );
+        this.idGalEnt =String.valueOf(UUID.randomUUID());
     }
 
-    public GalleryEntity ( String id , byte[] file , String name , String description , String userId ) {
+    public GalleryEntity (String idGalEnt, byte[] file , String name , String description , String idUser) {
         super ( );
-        this.id = id;
+        this.idGalEnt = idGalEnt;
         this.file = file;
         this.name = name;
         this.description = description;
-        this.userId = userId;
+        this.idUser = idUser;
     }
 
     public static long getSerialVersionUID () {
         return serialVersionUID;
     }
 
-    public String getId () {
-        return id;
+    public String getIdGalEnt() {
+        return idGalEnt;
     }
 
-    public void setId ( String id ) {
-        this.id = id;
+    public void setIdGalEnt(String idGalEnt) {
+        this.idGalEnt = idGalEnt;
     }
 
     public byte[] getFile () {
@@ -62,22 +63,22 @@ public class GalleryEntity implements Serializable {
         this.description = description;
     }
 
-    public String getUserId () {
-        return userId;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setUserId ( String userId ) {
-        this.userId = userId;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
     @Override
     public String toString () {
         return "GalleryEntity{" +
-                "id='" + id + '\'' +
+                "idGalEnt='" + idGalEnt + '\'' +
                 ", file=" + Arrays.toString (file) +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", userId='" + userId + '\'' +
+                ", idUser='" + idUser + '\'' +
                 '}';
     }
 }

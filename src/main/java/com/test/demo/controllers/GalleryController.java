@@ -7,10 +7,7 @@ import com.test.demo.models.GalleryEntity;
 import com.test.demo.services.GalleryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,7 +24,7 @@ public class GalleryController {
     // Displaying the initial gallery list.
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String getPersons(Model model) {
-        log.info("Start get Gallery list method");
+        log.warning("---------------------START get Gallery LIST method----------------------");
         List gall_list = galleryService.getAll();
         ObjectMapper mapper = new ObjectMapper();
         String galleryListJson = null;
@@ -38,45 +35,73 @@ public class GalleryController {
         }
         model.addAttribute("gallery", galleryListJson);
         log.warning("GalleryEntity" + gall_list.toString());
+        log.warning("---------------------END get Gallery LIST method----------------------");
         return "galleryEntity";
     }
 
     // Opening the add new gallery form page.
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String addUser(Model model) {
-        System.out.println("add gallery url");
-        model.addAttribute("galleryAttr", new GalleryEntity());
-        return "index";
+    @RequestMapping(value = "/add/{file}/{name}/{description}/{idUser}", method = RequestMethod.GET)
+    public String addGall(Model model, @PathVariable byte[] file, @PathVariable String name,
+                          @PathVariable String description, @PathVariable String idUser) {
+        log.warning("---------------------------ADD-Gallery-START-Controller---------------------------------");
+        log.warning("add gallery method: file " + file + ", name " + name +
+                ", description " + description + ", idUser " + idUser);
+
+        GalleryEntity gallEnt = new GalleryEntity();
+        gallEnt.setFile(file);
+        gallEnt.setName(name);
+        gallEnt.setDescription(description);
+        gallEnt.setIdUser(idUser);
+        galleryService.addGall(gallEnt);
+        log.warning("---------------------------ADD-Gallery-END-Controller---------------------------------");
+
+        return "redirect:/gallery/list";
     }
 
 
     // Opening the edit gallery form page.
-    @RequestMapping(value = "/edit ", method = RequestMethod.GET)
-    public String editGall(@RequestParam(value = "id", required = true) String id, Model model) {
-        System.out.println("edit gallery url");
-        model.addAttribute("galleryAttr", galleryService.findGallId(id));
-        return "index";
+    @RequestMapping(value = "/edit/{idGalEnt}/{name}/{description}", method = RequestMethod.GET)
+    public String editGall(@PathVariable String idGalEnt, @PathVariable String name,
+                           @PathVariable String description) {
+        log.warning("edit gallery "+idGalEnt+", name "+name+", description "
+                +description);
+        GalleryEntity gallEnt = galleryService.findGallById(idGalEnt);
+        if (gallEnt != null) {
+            gallEnt.setName(name);
+            gallEnt.setDescription(description);
+            galleryService.editGall(gallEnt);
+            log.info("!!!!!!!!Success update comment with idGalEnt {"
+                    + gallEnt.toString() + "}");
+        }
+        return "redirect:/gallery/list";
     }
 
     // Deleting the specified gallery.
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@RequestParam(value = "id", required = true) String id, Model model) {
-        System.out.println("delete gallery URL");
-        galleryService.deleteGall(id);
-        return "redirect:list";
-    }
-
-    // Adding a new gallery or updating an existing gallery.
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@ModelAttribute("galleryAttr") GalleryEntity galleryEntity) {
-        if (galleryEntity.getId() != null && !galleryEntity.getId().trim().equals("")) {
-            galleryService.editGall(galleryEntity);
+    @RequestMapping(value = "/delete/{idGalEnt}", method = RequestMethod.GET)
+    public String deleteGall(@PathVariable String idGalEnt) {
+        log.info("delete gallery");
+        GalleryEntity gallEnt = galleryService.findGallById(idGalEnt);
+        if (gallEnt != null) {
+            galleryService.deleteGall(idGalEnt);
+            log.info("Success delete gallery with idGalEnt {" + idGalEnt + "}");
         } else {
-            galleryService.addGall(galleryEntity);
+            log.warning("Unable to delete. Gallery with idGalEnt {" + idGalEnt + "} not found.");
         }
-        return "redirect:list";
+        return "redirect:/gallery/list";
     }
 
+    @RequestMapping(value = "/one_gallery/{idGalEnt}", method = RequestMethod.GET)
+    public String getGalleryById(@PathVariable String idGalEnt, Model model){
+        ObjectMapper mapper = new ObjectMapper();
+        GalleryEntity gallEnt = galleryService.findGallById(idGalEnt);
+        String gallEntJson = null;
+        try{
+            gallEntJson=mapper.writeValueAsString(gallEnt);
+        }catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+        model.addAttribute("gallery", gallEntJson);
+        log.info("Gallery: " + gallEnt.toString());
+        return "galleryEntity";
+    }
 }
-
-

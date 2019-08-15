@@ -24,28 +24,25 @@ public class GalleryService {
     static String db_collection = "mycollection";
 
     //Fetch all galleryEntity from the mongo database.
-    public List getAll () {
-        List gallery_list = new ArrayList ( );
-        MongoCollection<Document> coll = MongoFactory.getCollection (db_collection);
+    public List getAll() {
+        List gallery_list = new ArrayList();
+        MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
 
         //Fetching cursor object for iterating on the database records.
-        MongoCursor<Document> cursor = coll.find ( ).iterator ( );
-        while (cursor.hasNext ( )) {
-            Document document = cursor.next ( );
-            GalleryEntity galleryEntity = new GalleryEntity ( );
+        MongoCursor<Document> cursor = coll.find().iterator();
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            GalleryEntity galleryEntity = new GalleryEntity();
 
-            if (!document.isEmpty() && document.get("id") != null) {
-                log.warning(document.toString());
-
-                galleryEntity.setId(document.get("id").toString());
+            if (!document.isEmpty() && document.get("idGalEnt") != null && null != document.get("description") ) {
+                log.info( "!!GALLERY_SERVICE " + document.toString());
+                galleryEntity.setIdGalEnt(document.get("idGalEnt").toString());
                 galleryEntity.setName(document.get("name").toString());
-//                galleryEntity.setFile(document.get("file").toString().getBytes());
                 galleryEntity.setDescription(document.get("description").toString());
-                galleryEntity.setUserId(document.get("userId").toString());
-
-                if (document.get("file")==null){
+                galleryEntity.setIdUser(document.get("idUser").toString());
+                if (document.get("file") == null) {
                     galleryEntity.setFile(null);
-                }else {
+                } else {
                     galleryEntity.setFile(document.get("file").toString().getBytes());
                 }
                 gallery_list.add(galleryEntity);
@@ -55,19 +52,21 @@ public class GalleryService {
     }
 
 
-    public Boolean addGall ( GalleryEntity galleryEntity ) {
+    public Boolean addGall(GalleryEntity galleryEntity) {
         boolean output = false;
-        Random ran = new Random ( );
+        Random ran = new Random();
         try {
-            MongoCollection coll = MongoFactory.getCollection (db_collection);
-            Document doc = new Document ( );
-            doc.put ("id" , galleryEntity.getId ( ));
-            doc.put ("file" , galleryEntity.getFile ( ));
-            doc.put ("name" , galleryEntity.getName ( ));
-            doc.put ("description" , galleryEntity.getDescription ( ));
-            doc.put ("userId" , galleryEntity.getUserId ( ));
+            MongoCollection coll = MongoFactory.getCollection(db_collection);
+            log.warning("add Gallery to mongo DB");
+            Document doc = new Document();
+            doc.put("idGalEnt", galleryEntity.getIdGalEnt());
+            doc.put("file", galleryEntity.getFile());
+            doc.put("name", galleryEntity.getName());
+            doc.put("description", galleryEntity.getDescription());
+            doc.put("idUser", galleryEntity.getIdUser());
 
-            coll.insertOne (doc);
+            // Save a new gallery to the mongo collection.
+            coll.insertOne(doc);
             output = true;
 
         } catch (Exception e) {
@@ -78,69 +77,71 @@ public class GalleryService {
 
     }
 
-    public Boolean editGall ( GalleryEntity galleryEntity ) {
+    public Boolean editGall(GalleryEntity galleryEntity) {
         boolean output = false;
         Bson filter;
         Bson query;
         try {
-            Document existing = getDocument (galleryEntity.getId ( ));
-            MongoCollection<Document> coll = MongoFactory.getCollection (db_collection);
+            Document existing = getDocument(galleryEntity.getIdGalEnt());
+            MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
 
-            Document edited = new Document ( );
-            edited.put ("id" , galleryEntity.getId ( ));
-            edited.put ("file" , galleryEntity.getFile ( ));
-            edited.put ("name" , galleryEntity.getName ( ));
-            edited.put ("description" , galleryEntity.getDescription ( ));
-            edited.put ("userId" , galleryEntity.getDescription ( ));
+            Document edited = new Document();
+            edited.put("idGalEnt", galleryEntity.getIdGalEnt());
+            edited.put("file", galleryEntity.getFile());
+            edited.put("name", galleryEntity.getName());
+            edited.put("description", galleryEntity.getDescription());
+            edited.put("idUser", galleryEntity.getDescription());
 
-            coll.replaceOne (eq ("id" , galleryEntity.getId ( )) , edited);
+            coll.replaceOne(eq("idGalEnt", galleryEntity.getIdGalEnt()), edited);
+//            coll.replaceOne (eq ("file" ,galleryEntity.getFile()), edited);
+//            coll.replaceOne (eq ("name" ,galleryEntity.getName()), edited);
+//            coll.replaceOne (eq ("description" ,galleryEntity.getDescription()), edited);
+//            coll.replaceOne (eq ("idUser" ,galleryEntity.getIdUser()), edited);
+
             output = true;
 
+        } catch (Exception e) {
+            output = false;
+        }
+        return output;
+    }
+
+    private Document getDocument(String idGalEnt) {
+        MongoCollection coll = MongoFactory.getCollection(db_collection);
+        Document where_query = new Document();
+        return (Document) coll.find(eq("idGalEnt", idGalEnt)).first();
+    }
+
+    public Boolean deleteGall(String idGalEnt) {
+        boolean output = false;
+        try {
+            Document item = (Document) getDocument(idGalEnt);
+            MongoCollection coll = MongoFactory.getCollection(db_collection);
+
+            coll.deleteOne(eq("idGalEnt", idGalEnt));
+            output = true;
         } catch (Exception e) {
             output = false;
 
         }
         return output;
-    }
-
-    private Document getDocument ( String id ) {
-        MongoCollection coll = MongoFactory.getCollection (db_collection);
-        Document where_query = new Document ( );
-        return (Document) coll.find (eq ("id" , id)).first ( );
-    }
-
-    public Boolean deleteGall ( String id ) {
-        boolean output = false;
-        try {
-        Document item = (Document)getDocument (id);
-        MongoCollection coll = MongoFactory.getCollection (db_collection);
-
-        coll.deleteOne (eq ("id",id));
-        output = true;
-        }catch (Exception e){
-            output = false;
-
-        }
-        return  output;
 
     }
 
-    public GalleryEntity findGallId(String id){
-        GalleryEntity g = new GalleryEntity ();
-        MongoCollection coll = MongoFactory.getCollection (db_collection);
+    public GalleryEntity findGallById(String idGalEnt) {
+        GalleryEntity g = new GalleryEntity();
+        MongoCollection coll = MongoFactory.getCollection(db_collection);
 
-        Document where_query = new Document ();
-        Document dbo = (Document) coll.find (eq("id",id)).first ();
-        System.out.println (dbo.toString ());
-        g.setId (dbo.get ("id").toString ());
+        Document where_query = new Document();
+        Document dbo = (Document) coll.find(eq("idGalEnt", idGalEnt)).first();
+        System.out.println(dbo.toString());
+        g.setIdGalEnt(dbo.get("idGalEnt").toString());
 //        g.setFile (dbo.get ("file").toString ().getBytes ());
-        g.setName (dbo.get ("name").toString ());
-        g.setDescription (dbo.get ("description").toString ());
-        g.setUserId (dbo.get ("userId").toString ());
+        g.setName(dbo.get("name").toString());
+        g.setDescription(dbo.get("description").toString());
+        g.setIdUser(dbo.get("idUser").toString());
 
         return g;
-
-
     }
 }
 

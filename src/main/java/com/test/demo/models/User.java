@@ -1,33 +1,35 @@
 package com.test.demo.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id, name, phone, email, status;
+    private String idUser, name, phone, email, status;
 
     public User() {
-        super();
+        this.idUser= String.valueOf(UUID.randomUUID());
     }
 
-
-
-    public User(String id, String name, String phone, String email, String status) {
+    public User(String idUser, String name, String phone, String email, String status) {
         super();
-        this.id = id;
+        this.idUser = idUser;
+        //login
+        //pass
+
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.status = status;
     }
 
-    public String getId() {
-        return id;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
     public String getName() {
@@ -65,7 +67,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "idUser='" + idUser + '\'' +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +

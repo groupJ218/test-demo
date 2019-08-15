@@ -32,8 +32,10 @@ public class CommentService {
         while (cursor.hasNext()) {
             Document document = cursor.next();
             Comment comment = new Comment();
+
             if (!document.isEmpty() && document.get("idComment") != null) {
                 log.warning(document.toString());
+
                 comment.setIdComment(document.get(("idComment")).toString());
                 comment.setIdUser(document.get(("idUser")).toString());
                 comment.setIdGalEnt(document.get(("idGalEnt")).toString());
@@ -81,7 +83,7 @@ public class CommentService {
         Bson filter;
         Bson query;
         try {
-            // Fetching the user details.
+            // Fetching the comment details.
             Document existing = getDocument(String.valueOf(comment.getIdComment()));
             MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
 

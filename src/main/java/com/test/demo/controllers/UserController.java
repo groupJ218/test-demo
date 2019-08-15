@@ -6,10 +6,7 @@ import com.test.demo.models.User;
 import com.test.demo.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,7 +23,7 @@ public class UserController {
     // Displaying the initial users list.(/user/list)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String getPersons(Model model) {
-        log.info("Start get User List method");
+        log.warning("=========================START get User List method=============================");
         List user_list = userService.getAll();
         ObjectMapper mapper = new ObjectMapper();
         String userListJson = null;
@@ -36,43 +33,71 @@ public class UserController {
             e.printStackTrace();
         }
         model.addAttribute("users", userListJson);
-        log.warning("Users: "+ user_list.toString());
+        log.warning("Users: " + user_list.toString());
+        log.warning("=========================END get User List method=============================");
         return "user";
     }
 
     // Opening the add new user form page.
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String addUser(Model model) {
-        System.out.println("add url");
-        model.addAttribute("userAttr", new User());
-        return "index";
+    @RequestMapping(value = "/add/{name}/{phone}/{email}/{status}", method = RequestMethod.GET)
+    public String addUser(Model model, @PathVariable String name, @PathVariable String phone,
+                          @PathVariable String email, @PathVariable String status) {
+        log.warning("=============================ADD User START Controller=============================");
+        log.warning("add user method: name " + name + ", phone " + phone + ", email " + email + ", status " + status);
+
+        User user = new User();
+        user.setName(name);
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setStatus(status);
+        userService.addUser(user);
+        log.warning("=============================ADD User END Controller=============================");
+        return "redirect:/user/list";
     }
 
     // Opening the edit user form page.
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editUser(@RequestParam(value = "id", required = true) String id, Model model) {
-        System.out.println("edit url");
-        model.addAttribute("userAttr", userService.findUserId(id));
-        return "index";
+    @RequestMapping(value = "/edit/{idUser}/{phone}/{email}/{status}", method = RequestMethod.GET)
+    public String editUser(@PathVariable String idUser, @PathVariable String phone,
+                           @PathVariable String email, @PathVariable String status) {
+        log.warning("edit user: " + idUser + ", phone "
+                + phone + ", emil " + email + ", status " + status);
+        User user = userService.findUserById(idUser);
+        if (user != null) {
+            user.setPhone(phone);
+            user.setEmail(email);
+            user.setStatus(status);
+            userService.editUser(user);
+            log.info("!!!!!!!!Success update user with idUser {"
+                    + user.toString() + "}");
+        }
+        return "redirect:/user/list";
     }
 
     // Deleting the specified user.
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@RequestParam(value = "id", required = true) String id, Model model) {
-        System.out.println("delete URL");
-        userService.delete(id);
-        return "redirect:list";
-    }
-
-    // Adding a new user or updating an existing user.
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@ModelAttribute("userAttr") User user) {
-        if (user.getId() != null && !user.getId().trim().equals("")) {
-            userService.edit(user);
+    @RequestMapping(value = "/delete/{idUser}", method = RequestMethod.GET)
+    public String deleteUser(@PathVariable String idUser) {
+        log.info("delete user");
+        User user = userService.findUserById(idUser);
+        if (user != null) {
+            userService.deleteUser(idUser);
+            log.info("Success delete user with id {" + idUser + "}");
         } else {
-            userService.add(user);
+            log.warning("Unable to delete. User with id {" + idUser + "} not found.");
         }
-        return "redirect:list";
+        return "redirect:/user/list";
     }
-
+    @RequestMapping(value = "/one_user/{idUser}", method = RequestMethod.GET)
+    public String getUserById(Model model, @PathVariable String idUser) {
+        User user = userService.findUserById(idUser);
+        String userJson = null;
+        ObjectMapper m = new ObjectMapper();
+        try {
+            userJson = m.writeValueAsString(user);
+        }catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+        model.addAttribute("users", userJson);
+        log.info("Users: "+ user.toString());
+        return "user";
+    }
 }

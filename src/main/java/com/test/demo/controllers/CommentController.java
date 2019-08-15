@@ -30,7 +30,6 @@ public class CommentController {
         String commentListJson = null;
         try {
             commentListJson = mapper.writeValueAsString(comment_list);
-
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -62,27 +61,27 @@ public class CommentController {
     // Opening the edit comment form page.
     @RequestMapping(value = "/edit/{idComment}/{text}", method = RequestMethod.GET)
     public String editComment(@PathVariable String idComment, @PathVariable String text) {
-        log.warning("edit comment " + idComment + ", text: "+ text);
+        log.warning("edit comment " + idComment + ", text: " + text);
         Comment comment = commentService.findCommentId(idComment);
         if (comment != null) {
             comment.setText(text);
             comment.setDate(new Date().toString());
             commentService.editComment(comment);
-            log.info("!!!!!!!!Success update comment with id {" + comment.toString()+ "}");
+            log.info("!!!!!!!!Success update comment with id {" + comment.toString() + "}");
         }
         return "redirect:/comment/list";
     }
 
     // Deleting the specified comment.
     @RequestMapping(value = "/delete/{idComment}", method = RequestMethod.GET)
-    public String delete(@PathVariable String idComment) {
+    public String deleteComment(@PathVariable String idComment) {
         log.info("delete comment");
         Comment comment = commentService.findCommentId(idComment);
         if (comment != null) {
             commentService.deleteComment(idComment);
             log.info("Success delete comment with id {" + idComment + "}");
         } else {
-        log.warning("Unable to delete. Comment with id {" + idComment + "} not found.");
+            log.warning("Unable to delete. Comment with id {" + idComment + "} not found.");
         }
         return "redirect:/comment/list";
     }
@@ -98,7 +97,7 @@ public class CommentController {
             ex.printStackTrace();
         }
         model.addAttribute("comments", commentJson);
-        log.warning("Comments: " + comment.toString());
+        log.info("Comments: " + comment.toString());
         return "comment";
     }
 }
