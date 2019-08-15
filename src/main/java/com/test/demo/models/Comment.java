@@ -8,9 +8,8 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Comment implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-
+    private String className;
     private String idComment;
     private String idUser;
     private String idGalEnt;
@@ -20,18 +19,28 @@ public class Comment implements Serializable {
 
     public Comment() {
         this.idComment = String.valueOf(UUID.randomUUID());
+        this.className = "comment";
     }
 
-    public Comment(String idComment, String idUser, String idGalEnt, String text, Date date) {
-        this.idComment = idComment;
+    public Comment(String idUser, String idGalEnt, String text, Date date) {
+        this.className = "comment";
+        this.idComment = String.valueOf(UUID.randomUUID());
         this.idUser = idUser;
         this.idGalEnt = idGalEnt;
         this.text = text;
         this.date = date;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getIdComment() {
