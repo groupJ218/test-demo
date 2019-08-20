@@ -1,12 +1,10 @@
 package com.test.demo.services;
 
-
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.test.demo.models.Comment;
 import com.test.demo.utils.mongo.MongoFactory;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,9 +31,8 @@ public class CommentService {
             Document document = cursor.next();
             Comment comment = new Comment();
 
-            if (!document.isEmpty() && document.get("idComment") != null) {
+            if (!document.isEmpty() && document.get("className") == Comment.CLASS_NAME) {
                 log.warning(document.toString());
-
                 comment.setIdComment(document.get(("idComment")).toString());
                 comment.setIdUser(null == document.get("idUser") ? "" : document.get("idUser").toString());
                 comment.setIdGalEnt(null == document.get("idGalEnt") ? "" : document.get("idGalEnt").toString());
@@ -61,6 +58,7 @@ public class CommentService {
             log.warning("add Comment to mongo DB");
             // Create a new object and add the new comment details to this object.
             Document doc = new Document();
+            doc.put("className", comment.getClassName());
             doc.put("idComment", comment.getIdComment());
             doc.put("idUser", comment.getIdUser());
             doc.put("idGalEnt", comment.getIdGalEnt());
@@ -79,32 +77,15 @@ public class CommentService {
 
     // Update the selected comment in the mongo database.
     public Boolean editComment(Comment comment) {
-        boolean output = false;
-        Bson filter;
-        Bson query;
+        boolean output ;
         try {
             // Fetching the comment details.
-            Document existing = getDocument(String.valueOf(comment.getIdComment()));
             MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
-
             // Create a new object and assign the updated details.
-
             Document edited = new Document();
-            edited.put("idComment", comment.getIdComment());
-            edited.put("idUser", comment.getIdUser());
-            edited.put("idGalEnt", comment.getIdGalEnt());
             edited.put("text", comment.getText());
-            edited.put("date", comment.getDate());
-            edited.put("idAnsCommentId", comment.getIdAnsCommentId());
-
             // Update the existing comment to the mongo database.
             coll.replaceOne(eq("idComment", comment.getIdComment()), edited);
-            coll.replaceOne(eq("idUser", comment.getIdUser()), edited);
-            coll.replaceOne(eq("idGalEnt", comment.getIdGalEnt()), edited);
-            coll.replaceOne(eq("text", comment.getText()), edited);
-            coll.replaceOne(eq("date", comment.getDate()), edited);
-            coll.replaceOne(eq("idAnsCommentId", comment.getIdAnsCommentId()), edited);
-
             output = true;
         } catch (Exception e) {
             output = false;
@@ -118,7 +99,6 @@ public class CommentService {
             // Fetching the required comment from the mongo database.
             Document item = (Document) getDocument(String.valueOf(idComment));
             MongoCollection coll = MongoFactory.getCollection(db_collection);
-
             // Deleting the selected comment from the mongo database.
             coll.deleteOne(eq("idComment", idComment));
             output = true;
@@ -132,11 +112,7 @@ public class CommentService {
     public Comment findCommentId(String idComment) {
         Comment c = new Comment();
         MongoCollection coll = MongoFactory.getCollection(db_collection);
-
         // Fetching the record object from the mongo database.
-        Document where_query = new Document();
-        //        where_query.put("idComment", idComment);
-
         Document dbo = (Document) coll.find(eq("idComment", idComment)).first();
         System.out.println(dbo.toString());
         c.setIdComment(dbo.get("idComment").toString());
@@ -146,24 +122,13 @@ public class CommentService {
         c.setDate(dbo.get("date").toString());
         if (dbo.get("IdAnsCommentId") != null)
             c.setIdAnsCommentId((dbo.get("IdAnsCommentId").toString()));
-        // Return comment object.
         return c;
     }
-
 
     // Fetching a particular record from the mongo database.
     private Document getDocument(String idComment) {
         MongoCollection coll = MongoFactory.getCollection(db_collection);
-
-        // Fetching the record object from the mongo database.
-        Document where_query = new Document();
-        // Put the selected user_id to search.
-        // where_query.put("idComment", idComment);
-
-        return (Document) coll.find(eq("idComment", idComment)).first();
-
+         return (Document) coll.find(eq("idComment", idComment)).first();
     }
-
-
 }
 

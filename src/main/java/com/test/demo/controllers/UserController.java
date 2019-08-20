@@ -39,26 +39,32 @@ public class UserController {
     }
 
     // Opening the add new user form page.
-    @RequestMapping(value = "/add/{name}/{phone}/{email}/{status}", method = RequestMethod.GET)
-    public String addUser(Model model, @PathVariable String name, @PathVariable String phone,
-                          @PathVariable String email, @PathVariable String status) {
+    @RequestMapping(value = "/add/{name}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
+    public String addUser(Model model,@PathVariable String name, @PathVariable String phone,
+                          @PathVariable String email, @PathVariable String status, @PathVariable String country,
+                          @PathVariable String login, @PathVariable String pass) {
         log.warning("=============================ADD User START Controller=============================");
-        log.warning("add user method: name " + name + ", phone " + phone + ", email " + email + ", status " + status);
+        log.warning("add user method: name " + name + ", phone " + phone + ", email " + email + ", status " + status
+        +", country "+ country+", login "+login+", pass "+pass);
 
         User user = new User();
         user.setName(name);
         user.setPhone(phone);
         user.setEmail(email);
         user.setStatus(status);
+        user.setCountry(country);
+        user.setLogin(login);
+        user.setPass(pass);
         userService.addUser(user);
         log.warning("=============================ADD User END Controller=============================");
         return "redirect:/user/list";
     }
 
     // Opening the edit user form page.
-    @RequestMapping(value = "/edit/{idUser}/{phone}/{email}/{status}", method = RequestMethod.GET)
-    public String editUser(@PathVariable String idUser, @PathVariable String phone,
-                           @PathVariable String email, @PathVariable String status) {
+    @RequestMapping(value = "/edit/{idUser}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
+    public String editUser(@PathVariable String idUser, @PathVariable String phone, @PathVariable String email,
+                           @PathVariable String status, @PathVariable String country,
+                           @PathVariable String login, @PathVariable String pass) {
         log.warning("edit user: " + idUser + ", phone "
                 + phone + ", emil " + email + ", status " + status);
         User user = userService.findUserById(idUser);
@@ -66,6 +72,9 @@ public class UserController {
             user.setPhone(phone);
             user.setEmail(email);
             user.setStatus(status);
+            user.setCountry(country);
+            user.setLogin(login);
+            user.setPass(pass);
             userService.editUser(user);
             log.info("!!!!!!!!Success update user with idUser {"
                     + user.toString() + "}");

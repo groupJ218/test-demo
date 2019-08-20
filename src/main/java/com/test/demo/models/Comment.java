@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Comment implements Serializable {
-
+    public static final String CLASS_NAME = "comment";
     private String className;
     private String idComment;
     private String idUser;
@@ -19,12 +19,12 @@ public class Comment implements Serializable {
 
     public Comment() {
         this.idComment = String.valueOf(UUID.randomUUID());
-        this.className = "comment";
+        this.className = CLASS_NAME;
     }
 
-    public Comment(String idUser, String idGalEnt, String text, Date date) {
-        this.className = "comment";
-        this.idComment = String.valueOf(UUID.randomUUID());
+    public Comment(String idComment, String idUser, String idGalEnt, String text, Date date) {
+        this.className = CLASS_NAME;
+        this.idComment = idComment;
         this.idUser = idUser;
         this.idGalEnt = idGalEnt;
         this.text = text;
@@ -33,10 +33,6 @@ public class Comment implements Serializable {
 
     public String getClassName() {
         return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
     }
 
     public void setDate(Date date) {
@@ -80,7 +76,7 @@ public class Comment implements Serializable {
     }
 
     public void setDate(String date) {
-        Date dateTmp = null;
+        Date dateTmp;
         SimpleDateFormat dateForm = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss");
         try {
             dateTmp = dateForm.parse(date);
@@ -106,13 +102,14 @@ public class Comment implements Serializable {
 
     @Override
     public String toString() {
-        Date date = new Date();
         return "Comment{" +
-                "idComment=" + idComment +
-                ", idUser=" + idUser +
-                ", idGalEnt=" + idGalEnt +
+                "className='" + className + '\'' +
+                ", idComment='" + idComment + '\'' +
+                ", idUser='" + idUser + '\'' +
+                ", idGalEnt='" + idGalEnt + '\'' +
                 ", text='" + text + '\'' +
                 ", date=" + date +
+                ", idAnsCommentId=" + idAnsCommentId +
                 '}';
     }
 }

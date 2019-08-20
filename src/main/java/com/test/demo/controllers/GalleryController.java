@@ -63,8 +63,8 @@ public class GalleryController {
     @RequestMapping(value = "/edit/{idGalEnt}/{name}/{description}", method = RequestMethod.GET)
     public String editGall(@PathVariable String idGalEnt, @PathVariable String name,
                            @PathVariable String description) {
-        log.warning("edit gallery "+idGalEnt+", name "+name+", description "
-                +description);
+        log.warning("edit gallery " + idGalEnt + ", name " + name + ", description "
+                + description);
         GalleryEntity gallEnt = galleryService.findGallById(idGalEnt);
         if (gallEnt != null) {
             gallEnt.setName(name);
@@ -91,13 +91,13 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/one_gallery/{idGalEnt}", method = RequestMethod.GET)
-    public String getGalleryById(@PathVariable String idGalEnt, Model model){
+    public String getGalleryById(@PathVariable String idGalEnt, Model model) {
         ObjectMapper mapper = new ObjectMapper();
         GalleryEntity gallEnt = galleryService.findGallById(idGalEnt);
         String gallEntJson = null;
-        try{
-            gallEntJson=mapper.writeValueAsString(gallEnt);
-        }catch (JsonProcessingException ex) {
+        try {
+            gallEntJson = mapper.writeValueAsString(gallEnt);
+        } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
         model.addAttribute("gallery", gallEntJson);

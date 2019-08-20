@@ -1,34 +1,36 @@
 package com.test.demo.models;
 
-import java.io.Serializable;
-import java.util.Arrays;
 import java.util.UUID;
-
+import java.util.Arrays;
+import java.io.Serializable;
 
 public class GalleryEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-    private String idGalEnt;
+    public static final String CLASS_NAME= "gallery";
     private byte[] file;
     private String name;
-    private String description;
     private String idUser;
+    private String idGalEnt;
+    private String className ;
+    private String description;
 
-    public GalleryEntity () {
-        this.idGalEnt =String.valueOf(UUID.randomUUID());
+    public GalleryEntity() {
+        this.className = CLASS_NAME;
+        this.idGalEnt = String.valueOf(UUID.randomUUID());
     }
 
-    public GalleryEntity (String idGalEnt, byte[] file , String name , String description , String idUser) {
-        super ( );
-        this.idGalEnt = idGalEnt;
+    public GalleryEntity(String idGalEnt, byte[] file, String name, String description, String idUser) {
+        super();
         this.file = file;
         this.name = name;
-        this.description = description;
         this.idUser = idUser;
+        this.idGalEnt = idGalEnt;
+        this.className = CLASS_NAME;
+        this.description = description;
     }
 
-    public static long getSerialVersionUID () {
-        return serialVersionUID;
+    public String getClassName() {
+        return className;
     }
 
     public String getIdGalEnt() {
@@ -39,27 +41,27 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = idGalEnt;
     }
 
-    public byte[] getFile () {
+    public byte[] getFile() {
         return file;
     }
 
-    public void setFile ( byte[] file ) {
+    public void setFile(byte[] file) {
         this.file = file;
     }
 
-    public String getName () {
+    public String getName() {
         return name;
     }
 
-    public void setName ( String name ) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription () {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription ( String description ) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -72,10 +74,11 @@ public class GalleryEntity implements Serializable {
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "GalleryEntity{" +
-                "idGalEnt='" + idGalEnt + '\'' +
-                ", file=" + Arrays.toString (file) +
+                "className='" + className + '\'' +
+                ", idGalEnt='" + idGalEnt + '\'' +
+                ", file=" + Arrays.toString(file) +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", idUser='" + idUser + '\'' +
