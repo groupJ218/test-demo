@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<p>User Name: <span th:text="${users}">Our App</span></p>
+<p>User Name2: <span th:text="${users}"></span></p>
+
+<div class="button" id="users_get" onclick="get_list()">Click</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        alert("ready!");
+    });
+
+    function get_list() {
+        alert("${users}");
+    }
+</script>
+<!--<script type="text/javascript" th:src="${js/user.js}"></script>-->
 </body>
 </html>

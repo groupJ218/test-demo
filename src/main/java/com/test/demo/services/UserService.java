@@ -37,7 +37,14 @@ public class UserService {
 //                log.warning("!!!!!with email and name = null " + document.toString());
 ////                deleteUser(document.getString("idUser"));
 //            }
-            if (!document.isEmpty() && document.get("className") == User.CLASS_NAME) {
+            String classNameValue;
+            try {
+                classNameValue = (String) document.get("className");
+            } catch (NullPointerException e) {
+                classNameValue = null;
+            }
+
+            if (!document.isEmpty() && User.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
                 log.warning("!!!!!with email" + document.toString());
                 setDocToUser(document, u);
                 user_list.add(u);
