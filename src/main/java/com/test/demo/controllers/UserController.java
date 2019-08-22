@@ -26,39 +26,41 @@ public class UserController {
         log.warning("=========================START get User List method=============================");
         List user_list = userService.getAll();
         ObjectMapper mapper = new ObjectMapper();
-        String userListJson = null;
-        try {
-            userListJson = mapper.writeValueAsString(user_list);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("users", userListJson);
+        model.addAttribute("uzer", new User());
+        model.addAttribute("users", user_list);
         log.warning("Users: " + user_list.toString());
         log.warning("=========================END get User List method=============================");
         return "user";
     }
 
-    // Opening the add new user form page.
-    @RequestMapping(value = "/add/{name}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
-    public String addUser(Model model,@PathVariable String name, @PathVariable String phone,
-                          @PathVariable String email, @PathVariable String status, @PathVariable String country,
-                          @PathVariable String login, @PathVariable String pass) {
-        log.warning("=============================ADD User START Controller=============================");
-        log.warning("add user method: name " + name + ", phone " + phone + ", email " + email + ", status " + status
-        +", country "+ country+", login "+login+", pass "+pass);
-
-        User user = new User();
-        user.setName(name);
-        user.setPhone(phone);
-        user.setEmail(email);
-        user.setStatus(status);
-        user.setCountry(country);
-        user.setLogin(login);
-        user.setPass(pass);
-        userService.addUser(user);
-        log.warning("=============================ADD User END Controller=============================");
+    @PostMapping("/add")
+    public String greetingSubmit(@ModelAttribute User uzer) {
+        log.fine("Income user: " + uzer.toString());
+        userService.addUser(uzer);
         return "redirect:/user/list";
     }
+
+//    // Opening the add new user form page.
+//    @RequestMapping(value = "/add/{name}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
+//    public String addUser(Model model,@PathVariable String name, @PathVariable String phone,
+//                          @PathVariable String email, @PathVariable String status, @PathVariable String country,
+//                          @PathVariable String login, @PathVariable String pass) {
+//        log.warning("=============================ADD User START Controller=============================");
+//        log.warning("add user method: name " + name + ", phone " + phone + ", email " + email + ", status " + status
+//        +", country "+ country+", login "+login+", pass "+pass);
+//
+//        User user = new User();
+//        user.setName(name);
+//        user.setPhone(phone);
+//        user.setEmail(email);
+//        user.setStatus(status);
+//        user.setCountry(country);
+//        user.setLogin(login);
+//        user.setPass(pass);
+//        userService.addUser(user);
+//        log.warning("=============================ADD User END Controller=============================");
+//        return "redirect:/user/list";
+//    }
 
     // Opening the edit user form page.
     @RequestMapping(value = "/edit/{idUser}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
@@ -95,6 +97,7 @@ public class UserController {
         }
         return "redirect:/user/list";
     }
+
     @RequestMapping(value = "/one_user/{idUser}", method = RequestMethod.GET)
     public String getUserById(Model model, @PathVariable String idUser) {
         User user = userService.findUserById(idUser);
@@ -102,11 +105,11 @@ public class UserController {
         ObjectMapper m = new ObjectMapper();
         try {
             userJson = m.writeValueAsString(user);
-        }catch (JsonProcessingException ex) {
+        } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
-        model.addAttribute("users", userJson);
-        log.info("Users: "+ user.toString());
+        model.addAttribute("uzer", user);
+        log.info("Users: " + user.toString());
         return "user";
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User</title>
@@ -8,7 +8,71 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<p>User Name2: <span th:text="${users}"></span></p>
+<p>
+<div class="row col-lg-12">
+    <!--Table with users-->
+    <table class="table table-striped table-responsive" id="user-table">
+        <thead class="thead">
+        <tr>
+            <!--            <th onclick="sortTable(0)">ID</th>-->
+            <!--            <th onclick="sortTable(1)">Name</th>-->
+            <!--            <th onclick="sortTable(2)">Surname</th>-->
+            <!--            <th onclick="sortTable(3)">Username</th>-->
+            <!--            <th onclick="sortTable(4)">Email</th>-->
+            <!--            <th></th>-->
+            <!--            <th></th>-->
+            <!--            <th></th>-->
+        </tr>
+        </thead>
+        <tbody id="user-table-body">
+<!--        <tr th:text = "${users}" > </tr>-->
+        <tr th:each="uzer : ${users}">
+
+            <!--/*@thymesVar id="name" type=""*/-->
+            <td th:text="${uzer.getName() }"></td>
+            <!--            <td th:text="${}"></td>-->
+            <!--            <td th:text="${user.surname}"></td>-->
+            <!--            <td th:text="${user.username}"></td>-->
+            <!--            <td th:text="${user.email}"></td>-->
+            <!--            <td th:switch="${user.enabled}">-->
+<!--            <span th:case="true" style="color:green">Enabled</span>-->
+<!--            <span th:case="false" style="color:red">Disabled</span>-->
+<!--            </td>-->
+
+            <!--            &lt;!&ndash;Edit user button&ndash;&gt;-->
+            <!--            <td><a style="text-decoration: none; color:blue"-->
+            <!--                   th:href="@{/adminPage/users/{id}(id=${user.id})}"-->
+            <!--                   class="editBtn" data-toggle="tooltip"-->
+            <!--                   data-placement="right" title="Edit user">-->
+            <!--                <i class="fa fa-edit"></i>-->
+            <!--            </a>-->
+            <!--            </td>-->
+
+            <!--            &lt;!&ndash;Remove user button&ndash;&gt;-->
+            <!--            <td>-->
+            <!--                <a id="remove-link" style="text-decoration: none; color:red"-->
+            <!--                   data-toggle='modal' data-target='#deleteModal'-->
+            <!--                   data-placement="right" title="Remove user"-->
+            <!--                   th:onclick="'setRowIndexAndUserId(this, ' + ${user.id} + ')'">-->
+            <!--                    <i class="fa fa-times" aria-hidden="true"></i>-->
+            <!--                </a>-->
+            <!--            </td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<form action="#" th:action="@{add}" th:object="${uzer}" th:method="post">
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Phone: <input type="text" th:field="*{phone}"/></p>
+    <p>Email: <input type="text" th:field="*{email}"/></p>
+    <p>Status: <input type="text" th:field="*{status}"/></p>
+    <p>Country: <input type="text" th:field="*{country}"/></p>
+    <p>Login: <input type="text" th:field="*{login}"/></p>
+    <p>Password: <input type="text" th:field="*{pass}"/></p>
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
 
 <div class="button" id="users_get" onclick="get_list()">Click</div>
 <script type="text/javascript">
@@ -20,6 +84,5 @@
         alert("${users}");
     }
 </script>
-<!--<script type="text/javascript" th:src="${js/user.js}"></script>-->
 </body>
 </html>
