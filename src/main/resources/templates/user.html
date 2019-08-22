@@ -19,26 +19,20 @@
             <!--            <th onclick="sortTable(2)">Surname</th>-->
             <!--            <th onclick="sortTable(3)">Username</th>-->
             <!--            <th onclick="sortTable(4)">Email</th>-->
-            <!--            <th></th>-->
-            <!--            <th></th>-->
-            <!--            <th></th>-->
+            <th>Name</th>
+            <th>Phone>
+            <th>Country</th>
+            <th>Email</th>
         </tr>
         </thead>
         <tbody id="user-table-body">
-<!--        <tr th:text = "${users}" > </tr>-->
         <tr th:each="uzer : ${users}">
-
-            <!--/*@thymesVar id="name" type=""*/-->
-            <td th:text="${uzer.getName() }"></td>
-            <!--            <td th:text="${}"></td>-->
-            <!--            <td th:text="${user.surname}"></td>-->
-            <!--            <td th:text="${user.username}"></td>-->
-            <!--            <td th:text="${user.email}"></td>-->
-            <!--            <td th:switch="${user.enabled}">-->
+            <td th:text="${uzer.getName()}"></td>
+            <td th:text="${uzer.getPhone()}"></td>
+            <td th:text="${uzer.getCountry()}"></td>
+            <td th:text="${uzer.getEmail()}"></td>
 <!--            <span th:case="true" style="color:green">Enabled</span>-->
 <!--            <span th:case="false" style="color:red">Disabled</span>-->
-<!--            </td>-->
-
             <!--            &lt;!&ndash;Edit user button&ndash;&gt;-->
             <!--            <td><a style="text-decoration: none; color:blue"-->
             <!--                   th:href="@{/adminPage/users/{id}(id=${user.id})}"-->
