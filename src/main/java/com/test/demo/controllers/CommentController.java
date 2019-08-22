@@ -42,7 +42,7 @@ public class CommentController {
 
     // Opening the add new comment form page.
     @RequestMapping(value = "/add/{idUser}/{idGalEnt}/{text}/{idAnsCommentId}", method = RequestMethod.GET)
-    public String addComment(Model model, @PathVariable String className, @PathVariable String idUser, @PathVariable String idGalEnt,
+    public String addComment(Model model,  @PathVariable String idUser, @PathVariable String idGalEnt,
                              @PathVariable String text, @PathVariable String idAnsCommentId) {
         log.warning("---------------------------ADD-Comment-START-Controller---------------------------------");
         log.warning("add comment method: idUser " + idUser + ", idGalEntity " + idGalEnt +

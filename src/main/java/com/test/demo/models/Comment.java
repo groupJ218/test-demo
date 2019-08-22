@@ -103,7 +103,6 @@ public class Comment implements Serializable {
     @Override
     public String toString() {
         return "Comment{" +
-                "className='" + className + '\'' +
                 ", idComment='" + idComment + '\'' +
                 ", idUser='" + idUser + '\'' +
                 ", idGalEnt='" + idGalEnt + '\'' +

@@ -40,16 +40,16 @@ public class GalleryController {
     }
 
     // Opening the add new gallery form page.
-    @RequestMapping(value = "/add/{file}/{name}/{description}/{idUser}", method = RequestMethod.GET)
-    public String addGall(Model model, @PathVariable byte[] file, @PathVariable String name,
+    @RequestMapping(value = "/add/{file}/{galleryName}/{description}/{idUser}", method = RequestMethod.GET)
+    public String addGall(Model model, @PathVariable byte[] file, @PathVariable String galleryName,
                           @PathVariable String description, @PathVariable String idUser) {
         log.warning("---------------------------ADD-Gallery-START-Controller---------------------------------");
-        log.warning("add gallery method: file " + file + ", name " + name +
+        log.warning("add gallery method: file " + file + ", galleryName " + galleryName +
                 ", description " + description + ", idUser " + idUser);
 
         GalleryEntity gallEnt = new GalleryEntity();
         gallEnt.setFile(file);
-        gallEnt.setName(name);
+        gallEnt.setGalleryName(galleryName);
         gallEnt.setDescription(description);
         gallEnt.setIdUser(idUser);
         galleryService.addGall(gallEnt);
@@ -60,14 +60,14 @@ public class GalleryController {
 
 
     // Opening the edit gallery form page.
-    @RequestMapping(value = "/edit/{idGalEnt}/{name}/{description}", method = RequestMethod.GET)
-    public String editGall(@PathVariable String idGalEnt, @PathVariable String name,
+    @RequestMapping(value = "/edit/{idGalEnt}/{galleryName}/{description}", method = RequestMethod.GET)
+    public String editGall(@PathVariable String idGalEnt, @PathVariable String galleryName,
                            @PathVariable String description) {
-        log.warning("edit gallery " + idGalEnt + ", name " + name + ", description "
+        log.warning("edit gallery " + idGalEnt + ", galleryName " + galleryName + ", description "
                 + description);
         GalleryEntity gallEnt = galleryService.findGallById(idGalEnt);
         if (gallEnt != null) {
-            gallEnt.setName(name);
+            gallEnt.setGalleryName(galleryName);
             gallEnt.setDescription(description);
             galleryService.editGall(gallEnt);
             log.info("!!!!!!!!Success update comment with idGalEnt {"

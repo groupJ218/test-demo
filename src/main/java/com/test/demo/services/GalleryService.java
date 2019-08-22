@@ -6,13 +6,11 @@ import com.mongodb.client.MongoCursor;
 import com.test.demo.models.GalleryEntity;
 import com.test.demo.utils.mongo.MongoFactory;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -33,11 +31,17 @@ public class GalleryService {
         while (cursor.hasNext()) {
             Document document = cursor.next();
             GalleryEntity galleryEntity = new GalleryEntity();
-
-            if (!document.isEmpty() && document.get("className") == GalleryEntity.CLASS_NAME ) {
-                log.info( "!!GALLERY_SERVICE " + document.toString());
+            log.warning("!!!!!Document to String: " + document.toString());
+            String classNameValue;
+            try {
+                classNameValue = (String) document.get("className");
+            } catch (NullPointerException e) {
+                classNameValue = null;
+            }
+            if (!document.isEmpty() && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
+                log.info("!!!!!with className" + document.toString());
                 galleryEntity.setIdGalEnt(document.get("idGalEnt").toString());
-                galleryEntity.setName(document.get("name").toString());
+                galleryEntity.setGalleryName(document.get("galleryName").toString());
                 galleryEntity.setDescription(document.get("description").toString());
                 galleryEntity.setIdUser(document.get("idUser").toString());
                 if (document.get("file") == null) {
@@ -51,7 +55,6 @@ public class GalleryService {
         return gallery_list;
     }
 
-
     public Boolean addGall(GalleryEntity galleryEntity) {
         boolean output;
         try {
@@ -61,10 +64,9 @@ public class GalleryService {
             doc.put("className", galleryEntity.getClassName());
             doc.put("idGalEnt", galleryEntity.getIdGalEnt());
             doc.put("file", galleryEntity.getFile());
-            doc.put("name", galleryEntity.getName());
+            doc.put("galleryName", galleryEntity.getGalleryName());
             doc.put("description", galleryEntity.getDescription());
             doc.put("idUser", galleryEntity.getIdUser());
-
             // Save a new gallery to the mongo collection.
             coll.insertOne(doc);
             output = true;
@@ -79,11 +81,11 @@ public class GalleryService {
     }
 
     public Boolean editGall(GalleryEntity galleryEntity) {
-        boolean output ;
+        boolean output;
         try {
             MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
             Document edited = getDocument(galleryEntity.getIdGalEnt());
-            edited.put("name", galleryEntity.getName());
+            edited.put("galleryName", galleryEntity.getGalleryName());
             edited.put("description", galleryEntity.getDescription());
             coll.replaceOne(eq("idGalEnt", galleryEntity.getIdGalEnt()), edited);
             output = true;
@@ -99,8 +101,9 @@ public class GalleryService {
     }
 
     public Boolean deleteGall(String idGalEnt) {
-        boolean output = false;
+        boolean output;
         try {
+            Document item = (Document) getDocument(idGalEnt);
             MongoCollection coll = MongoFactory.getCollection(db_collection);
             coll.deleteOne(eq("idGalEnt", idGalEnt));
             output = true;
@@ -113,12 +116,11 @@ public class GalleryService {
     public GalleryEntity findGallById(String idGalEnt) {
         GalleryEntity g = new GalleryEntity();
         MongoCollection coll = MongoFactory.getCollection(db_collection);
-
         Document dbo = (Document) coll.find(eq("idGalEnt", idGalEnt)).first();
         System.out.println(dbo.toString());
         g.setIdGalEnt(dbo.get("idGalEnt").toString());
 //        g.setFile (dbo.get ("file").toString ().getBytes ());
-        g.setName(dbo.get("name").toString());
+        g.setGalleryName(dbo.get("galleryName").toString());
         g.setDescription(dbo.get("description").toString());
         g.setIdUser(dbo.get("idUser").toString());
         return g;

@@ -8,10 +8,10 @@ public class GalleryEntity implements Serializable {
 
     public static final String CLASS_NAME= "gallery";
     private byte[] file;
-    private String name;
     private String idUser;
     private String idGalEnt;
     private String className ;
+    private String galleryName;
     private String description;
 
     public GalleryEntity() {
@@ -19,13 +19,14 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = String.valueOf(UUID.randomUUID());
     }
 
-    public GalleryEntity(String idGalEnt, byte[] file, String name, String description, String idUser) {
+    public GalleryEntity(String idGalEnt, byte[] file, String galleryName, String description, String idUser) {
         super();
+        this.className = CLASS_NAME;
         this.file = file;
-        this.name = name;
         this.idUser = idUser;
         this.idGalEnt = idGalEnt;
         this.className = CLASS_NAME;
+        this.galleryName = galleryName;
         this.description = description;
     }
 
@@ -49,12 +50,12 @@ public class GalleryEntity implements Serializable {
         this.file = file;
     }
 
-    public String getName() {
-        return name;
+    public String getGalleryName() {
+        return galleryName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGalleryName(String galleryName) {
+        this.galleryName = galleryName;
     }
 
     public String getDescription() {
@@ -76,10 +77,9 @@ public class GalleryEntity implements Serializable {
     @Override
     public String toString() {
         return "GalleryEntity{" +
-                "className='" + className + '\'' +
                 ", idGalEnt='" + idGalEnt + '\'' +
                 ", file=" + Arrays.toString(file) +
-                ", name='" + name + '\'' +
+                ", galleryName='" + galleryName + '\'' +
                 ", description='" + description + '\'' +
                 ", idUser='" + idUser + '\'' +
                 '}';
