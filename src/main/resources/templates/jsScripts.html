@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>scripts</title>
+</head>
+<body>
+
+<div th:fragment="scripts">
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}" ></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/nav.js}"></script>
+    <script th:src="@{/js/ajax_gal.js}"></script>
+</div>
+</body>
+</html>

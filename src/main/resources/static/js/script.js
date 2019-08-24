@@ -1,7 +1,8 @@
-$(document).ready(function() {
-   alert("Hello from script!!! =)")
+$(document).ready(function () {
+    console.info("script.js is connected!");
 });
 
 function get_list() {
-   alert("You pressed get List button!! =)");
+    console.debug("function " + this.name);
+    alert("You pressed get List button!! =)");
 }
