@@ -20,7 +20,7 @@
             <!--            <th onclick="sortTable(3)">Username</th>-->
             <!--            <th onclick="sortTable(4)">Email</th>-->
             <th>Name</th>
-            <th>Phone>
+            <th>Phone</th>
             <th>Country</th>
             <th>Email</th>
         </tr>
@@ -31,8 +31,8 @@
             <td th:text="${uzer.getPhone()}"></td>
             <td th:text="${uzer.getCountry()}"></td>
             <td th:text="${uzer.getEmail()}"></td>
-<!--            <span th:case="true" style="color:green">Enabled</span>-->
-<!--            <span th:case="false" style="color:red">Disabled</span>-->
+            <!--            <span th:case="true" style="color:green">Enabled</span>-->
+            <!--            <span th:case="false" style="color:red">Disabled</span>-->
             <!--            &lt;!&ndash;Edit user button&ndash;&gt;-->
             <!--            <td><a style="text-decoration: none; color:blue"-->
             <!--                   th:href="@{/adminPage/users/{id}(id=${user.id})}"-->
@@ -69,14 +69,6 @@
 </form>
 
 <div class="button" id="users_get" onclick="get_list()">Click</div>
-<script type="text/javascript">
-    $(document).ready(function () {
-        alert("ready!");
-    });
-
-    function get_list() {
-        alert("${users}");
-    }
-</script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>
