@@ -7,15 +7,20 @@ import com.test.demo.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
+    private Map<Long, byte[]> photos = new HashMap<Long, byte[]>();
     Logger log = Logger.getLogger(UserController.class.getName());
     @Resource(name = "UserService")
     private UserService userService;
@@ -26,7 +31,7 @@ public class UserController {
         log.warning("=========================START get User List method=============================");
         List user_list = userService.getAll();
         ObjectMapper mapper = new ObjectMapper();
-        model.addAttribute("uzer", new User());
+        model.addAttribute("newUser", new User());
         model.addAttribute("users", user_list);
         log.warning("Users: " + user_list.toString());
         log.warning("=========================END get User List method=============================");
@@ -39,28 +44,6 @@ public class UserController {
         userService.addUser(uzer);
         return "redirect:/user/list";
     }
-
-//    // Opening the add new user form page.
-//    @RequestMapping(value = "/add/{name}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
-//    public String addUser(Model model,@PathVariable String name, @PathVariable String phone,
-//                          @PathVariable String email, @PathVariable String status, @PathVariable String country,
-//                          @PathVariable String login, @PathVariable String pass) {
-//        log.warning("=============================ADD User START Controller=============================");
-//        log.warning("add user method: name " + name + ", phone " + phone + ", email " + email + ", status " + status
-//        +", country "+ country+", login "+login+", pass "+pass);
-//
-//        User user = new User();
-//        user.setName(name);
-//        user.setPhone(phone);
-//        user.setEmail(email);
-//        user.setStatus(status);
-//        user.setCountry(country);
-//        user.setLogin(login);
-//        user.setPass(pass);
-//        userService.addUser(user);
-//        log.warning("=============================ADD User END Controller=============================");
-//        return "redirect:/user/list";
-//    }
 
     // Opening the edit user form page.
     @RequestMapping(value = "/edit/{idUser}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
@@ -101,15 +84,24 @@ public class UserController {
     @RequestMapping(value = "/one_user/{idUser}", method = RequestMethod.GET)
     public String getUserById(Model model, @PathVariable String idUser) {
         User user = userService.findUserById(idUser);
-        String userJson = null;
-        ObjectMapper m = new ObjectMapper();
-        try {
-            userJson = m.writeValueAsString(user);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
-        }
         model.addAttribute("uzer", user);
-        log.info("Users: " + user.toString());
+        log.info("User: " + user.toString());
         return "user";
+    }
+
+    @RequestMapping(value = "/add_photo", method = RequestMethod.POST)
+    public String onAddPhoto(Model model, @RequestParam MultipartFile photo) throws IOException {
+        if (photo.isEmpty()) {
+            model.addAttribute("message", "you don`t choose photo");
+            return "index";
+        }
+        try {
+            long id = System.currentTimeMillis();
+            photos.put(id, photo.getBytes());
+            model.addAttribute("photo_id", id);
+            return "user/list";
+        } catch (IOException e) {
+            throw new IOException();
+        }
     }
 }
