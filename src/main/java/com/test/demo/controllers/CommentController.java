@@ -26,38 +26,44 @@ public class CommentController {
     public String getComment(Model model) {
         log.warning("---------------------------LIST-Comment-START-Controller---------------------------------");
         List comment_list = commentService.getAll();
-        ObjectMapper mapper = new ObjectMapper();
-        String commentListJson = null;
-        try {
-            commentListJson = mapper.writeValueAsString(comment_list);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("comments", commentListJson);
+//        ObjectMapper mapper = new ObjectMapper();
+//        String commentListJson = null;
+//        try {
+//            commentListJson = mapper.writeValueAsString(comment_list);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+        model.addAttribute("newComment", new Comment());
+        model.addAttribute("comments", comment_list);
         log.warning("Comments: " + comment_list.toString());
         log.warning("---------------------------LIST-Comment-END-Controller---------------------------------");
         return "comment";
     }
 
-
-    // Opening the add new comment form page.
-    @RequestMapping(value = "/add/{idUser}/{idGalEnt}/{text}/{idAnsCommentId}", method = RequestMethod.GET)
-    public String addComment(Model model,  @PathVariable String idUser, @PathVariable String idGalEnt,
-                             @PathVariable String text, @PathVariable String idAnsCommentId) {
-        log.warning("---------------------------ADD-Comment-START-Controller---------------------------------");
-        log.warning("add comment method: idUser " + idUser + ", idGalEntity " + idGalEnt +
-                ", text " + text.isEmpty() + ", idAnsCommentId " + idAnsCommentId);
-
-        Comment comment = new Comment();
-        comment.setIdUser(idUser);
-        comment.setIdGalEnt(idGalEnt);
-        comment.setText(text);
-        comment.setIdAnsCommentId(idAnsCommentId);
-        comment.setDate(new Date().toString());
+    @PostMapping("/add")
+    public String addComment(@ModelAttribute Comment comment){
+        log.fine("Income comment: " + comment.toString());
         commentService.addComment(comment);
-        log.warning("---------------------------ADD-Comment-END-Controller---------------------------------");
         return "redirect:/comment/list";
     }
+//    // Opening the add new comment form page.
+//    @RequestMapping(value = "/add/{idUser}/{idGalEnt}/{text}/{idAnsCommentId}", method = RequestMethod.GET)
+//    public String addComment(Model model,  @PathVariable String idUser, @PathVariable String idGalEnt,
+//                             @PathVariable String text, @PathVariable String idAnsCommentId) {
+//        log.warning("---------------------------ADD-Comment-START-Controller---------------------------------");
+//        log.warning("add comment method: idUser " + idUser + ", idGalEntity " + idGalEnt +
+//                ", text " + text.isEmpty() + ", idAnsCommentId " + idAnsCommentId);
+//
+//        Comment comment = new Comment();
+//        comment.setIdUser(idUser);
+//        comment.setIdGalEnt(idGalEnt);
+//        comment.setText(text);
+//        comment.setIdAnsCommentId(idAnsCommentId);
+//        comment.setDate(new Date().toString());
+//        commentService.addComment(comment);
+//        log.warning("---------------------------ADD-Comment-END-Controller---------------------------------");
+//        return "redirect:/comment/list";
+//    }
 
     // Opening the edit comment form page.
     @RequestMapping(value = "/edit/{idComment}/{text}", method = RequestMethod.GET)
@@ -89,16 +95,16 @@ public class CommentController {
 
     @RequestMapping(value = "/one_comment/{idComment}", method = RequestMethod.GET)
     public String getCommentById(Model model, @PathVariable String idComment) {
-        Comment comment = commentService.findCommentId(idComment);
-        String commentJson = null;
-        ObjectMapper m = new ObjectMapper();
-        try {
-            commentJson = m.writeValueAsString(comment);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
-        }
-        model.addAttribute("comments", commentJson);
-        log.info("Comments: " + comment.toString());
+        Comment oneComment = commentService.findCommentId(idComment);
+//        String commentJson = null;
+//        ObjectMapper m = new ObjectMapper();
+//        try {
+//            commentJson = m.writeValueAsString(comment);
+//        } catch (JsonProcessingException ex) {
+//            ex.printStackTrace();
+//        }
+        model.addAttribute("oneComment", oneComment);
+        log.info("Comment: " + oneComment.toString());
         return "comment";
     }
 }

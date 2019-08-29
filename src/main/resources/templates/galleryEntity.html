@@ -2,9 +2,48 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>GalleryEntity</title>
+    <title>Gallery entity</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 <body>
-<p>GalleryEntity Name: <span th:text="${gallery}">Our App</span></p>
+<p>
+<div class="row col-lg-12">
+    <!--Table with galleryEntity-->
+    <table class="table table-striped table-responsive" id="galleryEntity-table">
+        <thead class="thead">
+        <tr>
+            <th>Gallery name</th>
+            <th>Description</th>
+            <th>Id User</th>
+        </tr>
+        </thead>
+        <tbody id="galleryEntity-table-body">
+        <tr th:each="galleryEntity : ${gallery}">
+            <td th:text="${galleryEntity.getGalleryName()}"></td>
+            <td th:text="${galleryEntity.getDescription()}"></td>
+            <td th:text="${galleryEntity.getIdUser()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <form class="col-md-4" action="#" th:action="@{add}" th:object="${newGall}" th:method="post">
+<!--        <p>File: <input class="form-control" type="text" th:field="*{file}"/></p>-->
+        <p>Gallery name: <input class="form-control" type="text" th:field="*{galleryName}"/></p>
+        <p>Description: <input class="form-control" type="text" th:field="*{description}"/></p>
+        <p>Id User: <input class="form-control" type="text" th:field="*{idUser}"/></p>
+        <p><input class="btn btn-success" type="submit" value="Submit"/> <input class="btn btn-primary" type="reset" value="Reset"/></p>
+    </form>
+</div>
+<div align="center" class="col-md-12 form-select-button">
+    <form action="/user/add_file" enctype="multipart/form-data" method="POST">
+        File: <input id="upload" type="file" name="file"/>
+        <br/>
+        <input class="btn btn-inf" type="submit" value="Send to Gallery"/>
+    </form>
+    <br/>
+    <div class="btn btn-warning" id="galleryEntity_get" onclick="get_list()">Click</div>
+</div>
+<div th:replace="jsScripts :: scripts"></div>
 </body>
 </html>
