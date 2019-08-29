@@ -1,7 +1,5 @@
 package com.test.demo.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.demo.models.Comment;
 import com.test.demo.services.CommentService;
 import org.springframework.stereotype.Controller;
@@ -42,7 +40,7 @@ public class CommentController {
 
     @PostMapping("/add")
     public String addComment(@ModelAttribute Comment comment){
-        log.fine("Income comment: " + comment.toString());
+        log.warning("Income comment: " + comment.toString());
         commentService.addComment(comment);
         return "redirect:/comment/list";
     }

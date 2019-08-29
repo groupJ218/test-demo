@@ -1,8 +1,5 @@
 package com.test.demo.controllers;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.demo.models.GalleryEntity;
 import com.test.demo.services.GalleryService;
 import org.springframework.stereotype.Controller;
@@ -49,7 +46,7 @@ public class GalleryController {
     // Opening the add new gallery form page.
     @PostMapping("/add")
     public String addGall (@ModelAttribute GalleryEntity galleryEntity){
-        log.fine("Income galleryEntity: " + galleryEntity.toString());
+        log.warning("Income galleryEntity: " + galleryEntity.toString());
         galleryService.addGall(galleryEntity);
         return "redirect:/gallery/list";
     }

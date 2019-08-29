@@ -20,12 +20,12 @@
         </tr>
         </thead>
         <tbody id="comment-table-body">
-        <tr th:each="comment : ${comments}">
-            <td th:text="${comment.getIdUser()}"></td>
-            <td th:text="${comment.getIdGalEnt()}"></td>
-            <td th:text="${comment.getText()}"></td>
-            <td th:text="${comment.getDate()}"></td>
-            <td th:text="${comment.getIdAnsCommentId()}"></td>
+        <tr th:each="com : ${comments}">
+            <td th:text="${com.getIdUser()}"></td>
+            <td th:text="${com.getIdGalEnt()}"></td>
+            <td th:text="${com.getText()}"></td>
+            <td th:text="${com.getDate()}"></td>
+            <td th:text="${com.getIdAnsCommentId()}"></td>
         </tr>
         </tbody>
     </table>
