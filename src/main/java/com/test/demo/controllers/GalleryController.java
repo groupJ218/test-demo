@@ -1,21 +1,24 @@
 package com.test.demo.controllers;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.demo.models.GalleryEntity;
 import com.test.demo.services.GalleryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/gallery")
 public class GalleryController {
+
+    private Map<Long, byte[]> files = new HashMap<Long, byte[]>();
 
     Logger log = Logger.getLogger(GalleryController.class.getName());
     @Resource(name = "GalleryService")
@@ -26,37 +29,44 @@ public class GalleryController {
     public String getPersons(Model model) {
         log.warning("---------------------START get Gallery LIST method----------------------");
         List gall_list = galleryService.getAll();
-        ObjectMapper mapper = new ObjectMapper();
-        String galleryListJson = null;
-        try {
-            galleryListJson = mapper.writeValueAsString(gall_list);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("gallery", galleryListJson);
+//        ObjectMapper mapper = new ObjectMapper();
+//        String galleryListJson = null;
+//        try {
+//            galleryListJson = mapper.writeValueAsString(gall_list);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+        model.addAttribute("newGall", new GalleryEntity());
+        model.addAttribute("gallery", gall_list);
         log.warning("GalleryEntity" + gall_list.toString());
         log.warning("---------------------END get Gallery LIST method----------------------");
         return "galleryEntity";
     }
 
     // Opening the add new gallery form page.
-    @RequestMapping(value = "/add/{file}/{galleryName}/{description}/{idUser}", method = RequestMethod.GET)
-    public String addGall(Model model, @PathVariable byte[] file, @PathVariable String galleryName,
-                          @PathVariable String description, @PathVariable String idUser) {
-        log.warning("---------------------------ADD-Gallery-START-Controller---------------------------------");
-        log.warning("add gallery method: file " + file + ", galleryName " + galleryName +
-                ", description " + description + ", idUser " + idUser);
-
-        GalleryEntity gallEnt = new GalleryEntity();
-        gallEnt.setFile(file);
-        gallEnt.setGalleryName(galleryName);
-        gallEnt.setDescription(description);
-        gallEnt.setIdUser(idUser);
-        galleryService.addGall(gallEnt);
-        log.warning("---------------------------ADD-Gallery-END-Controller---------------------------------");
-
+    @PostMapping("/add")
+    public String addGall (@ModelAttribute GalleryEntity galleryEntity){
+        log.warning("Income galleryEntity: " + galleryEntity.toString());
+        galleryService.addGall(galleryEntity);
         return "redirect:/gallery/list";
     }
+//    @RequestMapping(value = "/add/{file}/{galleryName}/{description}/{idUser}", method = RequestMethod.GET)
+//    public String addGall(Model model, @PathVariable byte[] file, @PathVariable String galleryName,
+//                          @PathVariable String description, @PathVariable String idUser) {
+//        log.warning("---------------------------ADD-Gallery-START-Controller---------------------------------");
+//        log.warning("add gallery method: file " + file + ", galleryName " + galleryName +
+//                ", description " + description + ", idUser " + idUser);
+//
+//        GalleryEntity gallEnt = new GalleryEntity();
+//        gallEnt.setFile(file);
+//        gallEnt.setGalleryName(galleryName);
+//        gallEnt.setDescription(description);
+//        gallEnt.setIdUser(idUser);
+//        galleryService.addGall(gallEnt);
+//        log.warning("---------------------------ADD-Gallery-END-Controller---------------------------------");
+//
+//        return "redirect:/gallery/list";
+//    }
 
 
     // Opening the edit gallery form page.
@@ -92,16 +102,32 @@ public class GalleryController {
 
     @RequestMapping(value = "/one_gallery/{idGalEnt}", method = RequestMethod.GET)
     public String getGalleryById(@PathVariable String idGalEnt, Model model) {
-        ObjectMapper mapper = new ObjectMapper();
         GalleryEntity gallEnt = galleryService.findGallById(idGalEnt);
-        String gallEntJson = null;
-        try {
-            gallEntJson = mapper.writeValueAsString(gallEnt);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
-        }
-        model.addAttribute("gallery", gallEntJson);
+//       ObjectMapper mapper = new ObjectMapper();
+//        String gallEntJson = null;
+//        try {
+//            gallEntJson = mapper.writeValueAsString(gallEnt);
+//        } catch (JsonProcessingException ex) {
+//            ex.printStackTrace();
+//        }
+        model.addAttribute("gallery", gallEnt);
         log.info("Gallery: " + gallEnt.toString());
         return "galleryEntity";
+    }
+
+    @RequestMapping(value = "/add_file", method = RequestMethod.POST)
+    public String onAddFile(Model model, @RequestParam MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            model.addAttribute("message", "you don`t choose file");
+            return "index";
+        }
+        try {
+            long id = System.currentTimeMillis();
+            files.put(id, file.getBytes());
+            model.addAttribute("file_id", id);
+            return "gallery/list";
+        } catch (IOException e) {
+            throw new IOException();
+        }
     }
 }

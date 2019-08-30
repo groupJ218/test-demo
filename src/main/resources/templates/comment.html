@@ -1,10 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-s<head>
+<head>
     <meta charset="UTF-8">
     <title>Comment</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 <body>
-<p>Comment Name: <span th:text="${comments}">Our App</span></p>
+<p>
+<div class="row col-lg-12">
+    <!--Table with comments-->
+    <table class="table table-striped tale-responsive" id="comment-table">
+        <thead class="thead">
+        <tr>
+            <th>Id user</th>
+            <th>Id Gallery entity</th>
+            <th>Text</th>
+            <th>Date</th>
+            <th>Id Answer Comment Id</th>
+        </tr>
+        </thead>
+        <tbody id="comment-table-body">
+        <tr th:each="com : ${comments}">
+            <td th:text="${com.getIdUser()}"></td>
+            <td th:text="${com.getIdGalEnt()}"></td>
+            <td th:text="${com.getText()}"></td>
+            <td th:text="${com.getDate()}"></td>
+            <td th:text="${com.getIdAnsCommentId()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <form class="col-md-4" action="#" th:action="@{add}" th:object="${newComment}" th:method="post">
+        <p>IdUser: <input class="form-control" type="text" th:field="*{idUser}"/></p>
+        <p>IdGalEnt: <input class="form-control" type="text" th:field="*{idGalEnt}"/></p>
+        <p>Text: <input class="form-control" type="text" th:field="*{text}"/></p>
+<!--        <p>Date: <input class="form-control" type="text" th:field="*{date}"/></p>-->
+        <p>IdAnsCommentId: <input class="form-control" type="text" th:field="*{idAnsCommentId}"/></p>
+        <p><input class="btn btn-success" type="submit" value="Submit"/><input class="btn btn-primary" type="reset" value="Reset"/></p>
+    </form>
+</div>
+<div th:replace="jsScripts :: scripts"></div>
 </body>
 </html>

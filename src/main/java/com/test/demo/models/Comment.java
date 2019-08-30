@@ -20,6 +20,7 @@ public class Comment implements Serializable {
     public Comment() {
         this.idComment = String.valueOf(UUID.randomUUID());
         this.className = CLASS_NAME;
+        this.date = new Date();
     }
 
     public Comment(String idComment, String idUser, String idGalEnt, String text, Date date) {

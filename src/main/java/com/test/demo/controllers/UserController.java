@@ -40,7 +40,7 @@ public class UserController {
 
     @PostMapping("/add")
     public String greetingSubmit(@ModelAttribute User uzer) {
-        log.fine("Income user: " + uzer.toString());
+        log.warning("Income user: " + uzer.toString());
         userService.addUser(uzer);
         return "redirect:/user/list";
     }
