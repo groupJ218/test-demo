@@ -8,7 +8,10 @@ import com.test.demo.utils.mongo.MongoFactory;
 import org.bson.Document;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -31,7 +34,6 @@ public class GalleryService {
         while (cursor.hasNext()) {
             Document document = cursor.next();
             GalleryEntity galleryEntity = new GalleryEntity();
-            log.warning("!!!!!Document to String: " + document.toString());
             String classNameValue;
             try {
                 classNameValue = (String) document.get("className");
@@ -40,6 +42,7 @@ public class GalleryService {
             }
             if (!document.isEmpty() && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
                 log.info("!!!!!with className" + document.toString());
+                String string = null;
                 galleryEntity.setIdGalEnt(document.get("idGalEnt").toString());
                 galleryEntity.setGalleryName(document.get("galleryName").toString());
                 galleryEntity.setDescription(document.get("description").toString());
@@ -47,7 +50,8 @@ public class GalleryService {
                 if (document.get("file") == null) {
                     galleryEntity.setFile(null);
                 } else {
-                    galleryEntity.setFile(document.get("file").toString().getBytes());
+                    byte[] b = document.get("file").toString().getBytes(Charset.forName("UTF-8"));
+                    galleryEntity.setFile(new BASE64DecodedMultipartFile(b));
                 }
                 gallery_list.add(galleryEntity);
             }
@@ -57,13 +61,19 @@ public class GalleryService {
 
     public Boolean addGall(GalleryEntity galleryEntity) {
         boolean output;
+        String content = null;
+        try {
+            content = new String(galleryEntity.getFile().getBytes(), "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             MongoCollection coll = MongoFactory.getCollection(db_collection);
             log.warning("add Gallery to mongo DB");
             Document doc = getDocument();
             doc.put("className", galleryEntity.getClassName());
             doc.put("idGalEnt", galleryEntity.getIdGalEnt());
-            doc.put("file", galleryEntity.getFile());
+            doc.put("file", content);
             doc.put("galleryName", galleryEntity.getGalleryName());
             doc.put("description", galleryEntity.getDescription());
             doc.put("idUser", galleryEntity.getIdUser());

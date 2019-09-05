@@ -30,7 +30,7 @@ public class UserService {
         while (cursor.hasNext()) {
             Document document = cursor.next();
             User u = new User();
-            log.warning("!!!!!Document to String: " + document.toString());
+//            log.warning("!!!!!Document to String: " + document.toString());
 
 //            // this part of method for delete users
 //            if (!document.isEmpty() && document.get("idUser") != null && document.get("email") != null && null == document.get("name")) {

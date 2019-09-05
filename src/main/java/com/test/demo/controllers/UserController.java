@@ -8,9 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ import java.util.logging.Logger;
 @RequestMapping("/user")
 public class UserController {
 
-    private Map<Long, byte[]> photos = new HashMap<Long, byte[]>();
+    private Map<Long, byte[]> photos = new HashMap<>();
     Logger log = Logger.getLogger(UserController.class.getName());
     @Resource(name = "UserService")
     private UserService userService;
@@ -90,18 +92,26 @@ public class UserController {
     }
 
     @RequestMapping(value = "/add_photo", method = RequestMethod.POST)
-    public String onAddPhoto(Model model, @RequestParam MultipartFile photo) throws IOException {
+    public String onAddPhoto(Model model, @RequestParam("photo") MultipartFile photo, @RequestParam("fname") String fileName) throws Exception {
+
+
+        log.warning("!!!!Debug in controller");
+        log.warning("!!!! File name: "+ fileName);
         if (photo.isEmpty()) {
+            log.warning("!!photo is empty!!");
             model.addAttribute("message", "you don`t choose photo");
-            return "index";
         }
+        log.warning("Photo not empty try get file");
         try {
             long id = System.currentTimeMillis();
+            log.warning("File is " + photo.getBytes());
             photos.put(id, photo.getBytes());
             model.addAttribute("photo_id", id);
-            return "user/list";
+            log.warning("redirect to user list!!");
+            getPersons(model);
         } catch (IOException e) {
             throw new IOException();
         }
+        return "redirect:/user/list";
     }
 }

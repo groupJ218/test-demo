@@ -1,5 +1,7 @@
 package com.test.demo.models;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.UUID;
 import java.util.Arrays;
 import java.io.Serializable;
@@ -7,7 +9,7 @@ import java.io.Serializable;
 public class GalleryEntity implements Serializable {
 
     public static final String CLASS_NAME= "gallery";
-    private byte[] file;
+    private MultipartFile file;
     private String idUser;
     private String idGalEnt;
     private String className ;
@@ -19,7 +21,7 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = String.valueOf(UUID.randomUUID());
     }
 
-    public GalleryEntity(String idGalEnt, byte[] file, String galleryName, String description, String idUser) {
+    public GalleryEntity(String idGalEnt, MultipartFile file, String galleryName, String description, String idUser) {
         super();
         this.className = CLASS_NAME;
         this.file = file;
@@ -42,11 +44,11 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = idGalEnt;
     }
 
-    public byte[] getFile() {
+    public MultipartFile getFile() {
         return file;
     }
 
-    public void setFile(byte[] file) {
+    public void setFile(MultipartFile file) {
         this.file = file;
     }
 
@@ -78,7 +80,6 @@ public class GalleryEntity implements Serializable {
     public String toString() {
         return "GalleryEntity{" +
                 ", idGalEnt='" + idGalEnt + '\'' +
-                ", file=" + Arrays.toString(file) +
                 ", galleryName='" + galleryName + '\'' +
                 ", description='" + description + '\'' +
                 ", idUser='" + idUser + '\'' +
