@@ -15,6 +15,7 @@
             <th>Gallery name</th>
             <th>Description</th>
             <th>Id User</th>
+            <th>Gallery Id</th>
             <th>File</th>
         </tr>
         </thead>
@@ -23,19 +24,24 @@
             <td th:text="${galleryEntity.getGalleryName()}"></td>
             <td th:text="${galleryEntity.getDescription()}"></td>
             <td th:text="${galleryEntity.getIdUser()}"></td>
-            <td th:text="${galleryEntity.getFile()}"></td>
-<!--            <img class="card-img-top" th:src="@{galleryEntity.getFile()}">-->
+            <td th:text="${galleryEntity.getIdGalEnt()}"></td>
+<!--            <td th:text="${galleryEntity.getFile().getBytes().toString()}"></td>-->
+
+<!--            <td> <img th:when="*{'data:image/png;base64,' + Base64.getEncoder().encodeToString(galleryEntity.getFile().getBytes())}"  /></td>-->
+<!--          th:src="@{'data:image/jpg;base64,' + ${galleryEntity.getFile().getBytes()}}   <td><img alt="img" class="card-img-top" th:src="/getPhoto/${galleryEntity.getIdGalEnt()}"></td>-->
         </tr>
         </tbody>
     </table>
 </div>
+<div class="container">
+    <p><img alt="sample"  th:src="${'data:image/png;base64,'+image}"></p>
+</div>
 <div>
-    <form enctype="multipart/form-data" class="col-md-4" action="#" th:action="@{add}" th:object="${newGall}"
-          th:method="post">
-        <p>File: <input class="form-control" type="file" th:field="*{file}"/></p>
-        <p>Gallery name: <input class="form-control" type="text" th:field="*{galleryName}"/></p>
-        <p>Description: <input class="form-control" type="text" th:field="*{description}"/></p>
-        <p>Id User: <input class="form-control" type="text" th:field="*{idUser}"/></p>
+    <form enctype="multipart/form-data" class="col-md-4" action="#" th:action="@{add}"   th:method="post">
+        <p>File: <input class="form-control" type="file" name="file"/></p>
+        <p>Gallery name: <input class="form-control" type="text" name="galleryName"/></p>
+        <p>Description: <input class="form-control" type="text" name="description"/></p>
+        <p>Id User: <input class="form-control" type="text" name="idUser"/></p>
         <p><input class="btn btn-success" type="submit" value="Submit"/> <input class="btn btn-primary" type="reset"
                                                                                 value="Reset"/></p>
     </form>

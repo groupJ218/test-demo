@@ -5,7 +5,10 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.test.demo.models.GalleryEntity;
 import com.test.demo.utils.mongo.MongoFactory;
+import org.bson.BsonBinarySubType;
 import org.bson.Document;
+import org.bson.types.Binary;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +44,6 @@ public class GalleryService {
                 classNameValue = null;
             }
             if (!document.isEmpty() && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                log.info("!!!!!with className" + document.toString());
                 String string = null;
                 galleryEntity.setIdGalEnt(document.get("idGalEnt").toString());
                 galleryEntity.setGalleryName(document.get("galleryName").toString());
@@ -49,9 +51,9 @@ public class GalleryService {
                 galleryEntity.setIdUser(document.get("idUser").toString());
                 if (document.get("file") == null) {
                     galleryEntity.setFile(null);
+                    log.warning("No file");
                 } else {
-                    byte[] b = document.get("file").toString().getBytes(Charset.forName("UTF-8"));
-                    galleryEntity.setFile(new BASE64DecodedMultipartFile(b));
+                    galleryEntity.setFile(new Binary(BsonBinarySubType.BINARY, document.get("file").toString().getBytes()));
                 }
                 gallery_list.add(galleryEntity);
             }
@@ -63,7 +65,7 @@ public class GalleryService {
         boolean output;
         String content = null;
         try {
-            content = new String(galleryEntity.getFile().getBytes(), "UTF-8");
+            content = new String(galleryEntity.getFile().getData(), "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,7 +131,12 @@ public class GalleryService {
         Document dbo = (Document) coll.find(eq("idGalEnt", idGalEnt)).first();
         System.out.println(dbo.toString());
         g.setIdGalEnt(dbo.get("idGalEnt").toString());
-//        g.setFile (dbo.get ("file").toString ().getBytes ());
+        if (dbo.get("file") == null) {
+            g.setFile(null);
+            log.warning("No file");
+        } else {
+            g.setFile(new Binary(BsonBinarySubType.BINARY, dbo.get("file").toString().getBytes()));
+        }
         g.setGalleryName(dbo.get("galleryName").toString());
         g.setDescription(dbo.get("description").toString());
         g.setIdUser(dbo.get("idUser").toString());

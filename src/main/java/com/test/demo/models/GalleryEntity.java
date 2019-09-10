@@ -1,5 +1,6 @@
 package com.test.demo.models;
 
+import org.bson.types.Binary;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
@@ -9,7 +10,7 @@ import java.io.Serializable;
 public class GalleryEntity implements Serializable {
 
     public static final String CLASS_NAME= "gallery";
-    private MultipartFile file;
+    private Binary file;
     private String idUser;
     private String idGalEnt;
     private String className ;
@@ -21,7 +22,7 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = String.valueOf(UUID.randomUUID());
     }
 
-    public GalleryEntity(String idGalEnt, MultipartFile file, String galleryName, String description, String idUser) {
+    public GalleryEntity(String idGalEnt, Binary  file, String galleryName, String description, String idUser) {
         super();
         this.className = CLASS_NAME;
         this.file = file;
@@ -44,11 +45,11 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = idGalEnt;
     }
 
-    public MultipartFile getFile() {
+    public Binary  getFile() {
         return file;
     }
 
-    public void setFile(MultipartFile file) {
+    public void setFile(Binary  file) {
         this.file = file;
     }
 

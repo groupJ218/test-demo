@@ -37,7 +37,6 @@ public class CommentService {
                 classNameValue = null;
             }
             if (!document.isEmpty() && Comment.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                log.warning("!!!!!with className" + document.toString());
                 comment.setIdComment(document.get(("idComment")).toString());
                 comment.setIdUser(null == document.get("idUser") ? "" : document.get("idUser").toString());
                 comment.setIdGalEnt(null == document.get("idGalEnt") ? "" : document.get("idGalEnt").toString());

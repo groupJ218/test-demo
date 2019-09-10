@@ -45,7 +45,6 @@ public class UserService {
             }
 
             if (!document.isEmpty() && User.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                log.warning("!!!!!with className" + document.toString());
                 setDocToUser(document, u);
                 user_list.add(u);
             }
