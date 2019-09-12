@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class GalleryEntity implements Serializable {
 
     public static final String CLASS_NAME= "gallery";
-    private Binary file;
+    private String file;
     private String idUser;
     private String idGalEnt;
     private String className ;
@@ -22,7 +22,7 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = String.valueOf(UUID.randomUUID());
     }
 
-    public GalleryEntity(String idGalEnt, Binary  file, String galleryName, String description, String idUser) {
+    public GalleryEntity(String idGalEnt, String  file, String galleryName, String description, String idUser) {
         super();
         this.className = CLASS_NAME;
         this.file = file;
@@ -45,11 +45,11 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = idGalEnt;
     }
 
-    public Binary  getFile() {
+    public String  getFile() {
         return file;
     }
 
-    public void setFile(Binary  file) {
+    public void setFile(String  file) {
         this.file = file;
     }
 

@@ -25,16 +25,13 @@
             <td th:text="${galleryEntity.getDescription()}"></td>
             <td th:text="${galleryEntity.getIdUser()}"></td>
             <td th:text="${galleryEntity.getIdGalEnt()}"></td>
-<!--            <td th:text="${galleryEntity.getFile().getBytes().toString()}"></td>-->
-
-<!--            <td> <img th:when="*{'data:image/png;base64,' + Base64.getEncoder().encodeToString(galleryEntity.getFile().getBytes())}"  /></td>-->
-<!--          th:src="@{'data:image/jpg;base64,' + ${galleryEntity.getFile().getBytes()}}   <td><img alt="img" class="card-img-top" th:src="/getPhoto/${galleryEntity.getIdGalEnt()}"></td>-->
+            <td><img th:src="@{'data:image/jpeg;base64,' + ${galleryEntity.getFile()}}"></td>
         </tr>
         </tbody>
     </table>
 </div>
 <div class="container">
-    <p><img alt="sample"  th:src="${'data:image/png;base64,'+image}"></p>
+    <p><img alt="sample"  th:src="@{${image}}"></p>
 </div>
 <div>
     <form enctype="multipart/form-data" class="col-md-4" action="#" th:action="@{add}"   th:method="post">

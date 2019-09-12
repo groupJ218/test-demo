@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -53,7 +54,7 @@ public class GalleryService {
                     galleryEntity.setFile(null);
                     log.warning("No file");
                 } else {
-                    galleryEntity.setFile(new Binary(BsonBinarySubType.BINARY, document.get("file").toString().getBytes()));
+                    galleryEntity.setFile(document.get("file").toString());
                 }
                 gallery_list.add(galleryEntity);
             }
@@ -63,19 +64,14 @@ public class GalleryService {
 
     public Boolean addGall(GalleryEntity galleryEntity) {
         boolean output;
-        String content = null;
-        try {
-            content = new String(galleryEntity.getFile().getData(), "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        String dec = Base64.getDecoder().decode(galleryEntity.getFile().getData());
         try {
             MongoCollection coll = MongoFactory.getCollection(db_collection);
             log.warning("add Gallery to mongo DB");
             Document doc = getDocument();
             doc.put("className", galleryEntity.getClassName());
             doc.put("idGalEnt", galleryEntity.getIdGalEnt());
-            doc.put("file", content);
+            doc.put("file", galleryEntity.getFile());
             doc.put("galleryName", galleryEntity.getGalleryName());
             doc.put("description", galleryEntity.getDescription());
             doc.put("idUser", galleryEntity.getIdUser());
@@ -135,7 +131,7 @@ public class GalleryService {
             g.setFile(null);
             log.warning("No file");
         } else {
-            g.setFile(new Binary(BsonBinarySubType.BINARY, dbo.get("file").toString().getBytes()));
+            g.setFile(dbo.get("file").toString());
         }
         g.setGalleryName(dbo.get("galleryName").toString());
         g.setDescription(dbo.get("description").toString());
