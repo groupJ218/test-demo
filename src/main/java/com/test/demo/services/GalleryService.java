@@ -5,18 +5,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.test.demo.models.GalleryEntity;
 import com.test.demo.utils.mongo.MongoFactory;
-import org.bson.BsonBinarySubType;
 import org.bson.Document;
-import org.bson.types.Binary;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,7 +38,6 @@ public class GalleryService {
                 classNameValue = null;
             }
             if (!document.isEmpty() && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                String string = null;
                 galleryEntity.setIdGalEnt(document.get("idGalEnt").toString());
                 galleryEntity.setGalleryName(document.get("galleryName").toString());
                 galleryEntity.setDescription(document.get("description").toString());
@@ -64,7 +56,6 @@ public class GalleryService {
 
     public Boolean addGall(GalleryEntity galleryEntity) {
         boolean output;
-//        String dec = Base64.getDecoder().decode(galleryEntity.getFile().getData());
         try {
             MongoCollection coll = MongoFactory.getCollection(db_collection);
             log.warning("add Gallery to mongo DB");
@@ -111,7 +102,6 @@ public class GalleryService {
     public Boolean deleteGall(String idGalEnt) {
         boolean output;
         try {
-            Document item = (Document) getDocument(idGalEnt);
             MongoCollection coll = MongoFactory.getCollection(db_collection);
             coll.deleteOne(eq("idGalEnt", idGalEnt));
             output = true;

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class Comment implements Serializable {
     public static final String CLASS_NAME = "comment";
@@ -20,7 +21,6 @@ public class Comment implements Serializable {
     public Comment() {
         this.idComment = String.valueOf(UUID.randomUUID());
         this.className = CLASS_NAME;
-        this.date = new Date();
     }
 
     public Comment(String idComment, String idUser, String idGalEnt, String text, Date date) {
@@ -78,12 +78,12 @@ public class Comment implements Serializable {
 
     public void setDate(String date) {
         Date dateTmp;
-        SimpleDateFormat dateForm = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss");
+        SimpleDateFormat dateForm = new SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy");
         try {
             dateTmp = dateForm.parse(date);
             this.date = dateTmp;
         } catch (ParseException e) {
-            this.date = new Date();
+            System.out.println("Parse exception!!!");
         }
     }
 

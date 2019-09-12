@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -41,6 +42,7 @@ public class CommentService {
                 comment.setIdUser(null == document.get("idUser") ? "" : document.get("idUser").toString());
                 comment.setIdGalEnt(null == document.get("idGalEnt") ? "" : document.get("idGalEnt").toString());
                 comment.setText(document.get("text").toString());
+                log.warning("Data form mongo db value: " + ( document.get("date")).toString());
                 comment.setDate(document.get("date").toString());
                 if (document.get("idAnsCommentId") == null) {
                     comment.setIdAnsCommentId("");
@@ -66,7 +68,7 @@ public class CommentService {
             doc.put("idUser", comment.getIdUser());
             doc.put("idGalEnt", comment.getIdGalEnt());
             doc.put("text", comment.getText());
-            doc.put("date", comment.getDate().toString());
+            doc.put("date", new Date().toString());
             doc.put("idAnsCommentId", comment.getIdAnsCommentId());
             // Save a new comment to the mongo collection.
             coll.insertOne(doc);
