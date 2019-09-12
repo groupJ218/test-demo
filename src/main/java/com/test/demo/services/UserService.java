@@ -28,18 +28,18 @@ public class UserService {
         // Fetching cursor object for iterating on the database records.
         MongoCursor<Document> cursor = coll.find().iterator();
         while (cursor.hasNext()) {
-            Document document = cursor.next();
-            User u = new User();
+            Document doc = cursor.next();
+            User user = new User();
             String classNameValue;
             try {
-                classNameValue = (String) document.get("className");
+                classNameValue = (String) doc.get("className");
             } catch (NullPointerException e) {
                 classNameValue = null;
             }
 
-            if (!document.isEmpty() && User.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                setDocToUser(document, u);
-                user_list.add(u);
+            if (!doc.isEmpty() && User.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
+                setDocToUser(doc, user);
+                user_list.add(user);
             }
         }
         return user_list;
@@ -47,12 +47,12 @@ public class UserService {
 
     // Fetching a single user details from the mongo database.
     public User findUserById(String idUser) {
-        User u = new User();
+        User user = new User();
         MongoCollection coll = MongoFactory.getCollection(db_collection);
         // Fetching the record object from the mongo database.
         Document doc = (Document) coll.find(eq("idUser", idUser)).first();
-        setDocToUser(doc, u);
-        return u;
+        setDocToUser(doc, user);
+        return user;
     }
 
     // Add a new user to the mongo database.
@@ -75,15 +75,15 @@ public class UserService {
         return output;
     }
 
-    private void setDocToUser(Document document, User u) {
-        u.setIdUser(document.get(("idUser")).toString());
-        u.setName(document.get(("name")).toString());
-        u.setPhone(document.get(("phone")).toString());
-        u.setEmail(document.get(("email")).toString());
-        u.setStatus(document.get(("status")).toString());
-        u.setCountry(document.get(("country")).toString());
-        u.setLogin(document.get(("login")).toString());
-        u.setPass(document.get(("pass")).toString());
+    private void setDocToUser(Document doc, User user) {
+        user.setIdUser(doc.get(("idUser")).toString());
+        user.setName(doc.get(("name")).toString());
+        user.setPhone(doc.get(("phone")).toString());
+        user.setEmail(doc.get(("email")).toString());
+        user.setStatus(doc.get(("status")).toString());
+        user.setCountry(doc.get(("country")).toString());
+        user.setLogin(doc.get(("login")).toString());
+        user.setPass(doc.get(("pass")).toString());
     }
 
     private void editUserToDoc(User user, Document doc) {
