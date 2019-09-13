@@ -29,25 +29,24 @@ public class GalleryService {
         //Fetching cursor object for iterating on the database records.
         MongoCursor<Document> cursor = coll.find().iterator();
         while (cursor.hasNext()) {
-            Document document = cursor.next();
+            Document doc = cursor.next();
             GalleryEntity galleryEntity = new GalleryEntity();
-            log.warning("!!!!!Document to String: " + document.toString());
             String classNameValue;
             try {
-                classNameValue = (String) document.get("className");
+                classNameValue = (String) doc.get("className");
             } catch (NullPointerException e) {
                 classNameValue = null;
             }
-            if (!document.isEmpty() && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                log.info("!!!!!with className" + document.toString());
-                galleryEntity.setIdGalEnt(document.get("idGalEnt").toString());
-                galleryEntity.setGalleryName(document.get("galleryName").toString());
-                galleryEntity.setDescription(document.get("description").toString());
-                galleryEntity.setIdUser(document.get("idUser").toString());
-                if (document.get("file") == null) {
+            if (!doc.isEmpty() && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
+                galleryEntity.setIdGalEnt(doc.get("idGalEnt").toString());
+                galleryEntity.setGalleryName(doc.get("galleryName").toString());
+                galleryEntity.setDescription(doc.get("description").toString());
+                galleryEntity.setIdUser(doc.get("idUser").toString());
+                if (doc.get("file") == null) {
                     galleryEntity.setFile(null);
+                    log.warning("No file");
                 } else {
-                    galleryEntity.setFile(document.get("file").toString().getBytes());
+                    galleryEntity.setFile(doc.get("file").toString());
                 }
                 gallery_list.add(galleryEntity);
             }
@@ -103,7 +102,6 @@ public class GalleryService {
     public Boolean deleteGall(String idGalEnt) {
         boolean output;
         try {
-            Document item = (Document) getDocument(idGalEnt);
             MongoCollection coll = MongoFactory.getCollection(db_collection);
             coll.deleteOne(eq("idGalEnt", idGalEnt));
             output = true;
@@ -114,16 +112,21 @@ public class GalleryService {
     }
 
     public GalleryEntity findGallById(String idGalEnt) {
-        GalleryEntity g = new GalleryEntity();
+        GalleryEntity galleryEntity = new GalleryEntity();
         MongoCollection coll = MongoFactory.getCollection(db_collection);
-        Document dbo = (Document) coll.find(eq("idGalEnt", idGalEnt)).first();
-        System.out.println(dbo.toString());
-        g.setIdGalEnt(dbo.get("idGalEnt").toString());
-//        g.setFile (dbo.get ("file").toString ().getBytes ());
-        g.setGalleryName(dbo.get("galleryName").toString());
-        g.setDescription(dbo.get("description").toString());
-        g.setIdUser(dbo.get("idUser").toString());
-        return g;
+        Document doc = (Document) coll.find(eq("idGalEnt", idGalEnt)).first();
+        System.out.println(doc.toString());
+        galleryEntity.setIdGalEnt(doc.get("idGalEnt").toString());
+        if (doc.get("file") == null) {
+            galleryEntity.setFile(null);
+            log.warning("No file");
+        } else {
+            galleryEntity.setFile(doc.get("file").toString());
+        }
+        galleryEntity.setGalleryName(doc.get("galleryName").toString());
+        galleryEntity.setDescription(doc.get("description").toString());
+        galleryEntity.setIdUser(doc.get("idUser").toString());
+        return galleryEntity;
     }
 }
 

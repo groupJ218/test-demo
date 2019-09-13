@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -27,26 +28,26 @@ public class CommentService {
         // Fetching cursor object for iterating on the database records.
         MongoCursor<Document> cursor = coll.find().iterator();
         while (cursor.hasNext()) {
-            Document document = cursor.next();
+            Document doc = cursor.next();
             Comment comment = new Comment();
-            log.warning("!!!!!Document to String: " + document.toString());
+            log.warning("!!!!!Document to String: " + doc.toString());
             String classNameValue;
             try {
-                classNameValue = (String) document.get("className");
+                classNameValue = (String) doc.get("className");
             } catch (NullPointerException e) {
                 classNameValue = null;
             }
-            if (!document.isEmpty() && Comment.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                log.warning("!!!!!with className" + document.toString());
-                comment.setIdComment(document.get(("idComment")).toString());
-                comment.setIdUser(null == document.get("idUser") ? "" : document.get("idUser").toString());
-                comment.setIdGalEnt(null == document.get("idGalEnt") ? "" : document.get("idGalEnt").toString());
-                comment.setText(document.get("text").toString());
-                comment.setDate(document.get("date").toString());
-                if (document.get("idAnsCommentId") == null) {
+            if (!doc.isEmpty() && Comment.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
+                comment.setIdComment(doc.get(("idComment")).toString());
+                comment.setIdUser(null == doc.get("idUser") ? "" : doc.get("idUser").toString());
+                comment.setIdGalEnt(null == doc.get("idGalEnt") ? "" : doc.get("idGalEnt").toString());
+                comment.setText(doc.get("text").toString());
+                log.warning("Data form mongo db value: " + ( doc.get("date")).toString());
+                comment.setDate(doc.get("date").toString());
+                if (doc.get("idAnsCommentId") == null) {
                     comment.setIdAnsCommentId("");
                 } else {
-                    comment.setIdAnsCommentId(document.get("idAnsCommentId").toString());
+                    comment.setIdAnsCommentId(doc.get("idAnsCommentId").toString());
                 }
                 comment_list.add(comment);
             }
@@ -67,7 +68,7 @@ public class CommentService {
             doc.put("idUser", comment.getIdUser());
             doc.put("idGalEnt", comment.getIdGalEnt());
             doc.put("text", comment.getText());
-            doc.put("date", comment.getDate().toString());
+            doc.put("date", new Date().toString());
             doc.put("idAnsCommentId", comment.getIdAnsCommentId());
             // Save a new comment to the mongo collection.
             coll.insertOne(doc);
@@ -113,18 +114,18 @@ public class CommentService {
 
     // Fetching a single user details from the mongo database.
     public Comment findCommentId(String idComment) {
-        Comment c = new Comment();
+        Comment comment = new Comment();
         MongoCollection coll = MongoFactory.getCollection(db_collection);
         // Fetching the record object from the mongo database.
-        Document dbo = (Document) coll.find(eq("idComment", idComment)).first();
-        c.setIdComment(dbo.get("idComment").toString());
-        c.setIdUser(dbo.get("idUser").toString());
-        c.setIdGalEnt(dbo.get("idGalEnt").toString());
-        c.setText(dbo.get("text").toString());
-        c.setDate(dbo.get("date").toString());
-        if (dbo.get("IdAnsCommentId") != null)
-            c.setIdAnsCommentId((dbo.get("IdAnsCommentId").toString()));
-        return c;
+        Document doc = (Document) coll.find(eq("idComment", idComment)).first();
+        comment.setIdComment(doc.get("idComment").toString());
+        comment.setIdUser(doc.get("idUser").toString());
+        comment.setIdGalEnt(doc.get("idGalEnt").toString());
+        comment.setText(doc.get("text").toString());
+        comment.setDate(doc.get("date").toString());
+        if (doc.get("IdAnsCommentId") != null)
+            comment.setIdAnsCommentId((doc.get("IdAnsCommentId").toString()));
+        return comment;
     }
 
     // Fetching a particular record from the mongo database.
