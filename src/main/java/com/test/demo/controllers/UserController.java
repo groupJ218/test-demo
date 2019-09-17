@@ -40,6 +40,20 @@ public class UserController {
         return "user";
     }
 
+//    @PostMapping("/login")
+//    public String loginUser() {
+//        log.warning("Income user data: ");
+//
+//        return "redirect:/user/list";
+//    }
+
+    @PostMapping("/login")
+    public String loginUser(@RequestParam("email") String email, @RequestParam ("password") String password ) {
+        log.warning("Income user data: " + password + " " + email);
+
+        return "redirect:/user/list";
+    }
+
     @PostMapping("/add")
     public String greetingSubmit(@ModelAttribute User uzer) {
         log.warning("Income user: " + uzer.toString());

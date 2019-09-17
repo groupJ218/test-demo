@@ -1,3 +1,7 @@
-img{
+img {
     height: 50px;
+}
+
+.form-control {
+   width: 94%;
 }
