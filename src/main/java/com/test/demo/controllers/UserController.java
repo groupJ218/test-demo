@@ -48,9 +48,8 @@ public class UserController {
 //    }
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam("email") String email, @RequestParam ("password") String password ) {
-        log.warning("Income user data: " + password + " " + email);
-
+    public String loginUser(@RequestParam("email") String email, @RequestParam("password") String  password) {
+        log.warning("Income user data: " + email + password) ;
         return "redirect:/user/list";
     }
 

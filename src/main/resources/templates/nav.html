@@ -1,4 +1,10 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+<body>
 <div th:fragment="nav">
     <nav class="navbar navbar-default navbar-inverse" role="navigation">
         <div class="container-fluid">
@@ -45,25 +51,16 @@
                                 class="caret"></span></a>
                         <ul id="login-dp" class="dropdown-menu">
                             <li>
-                                <div class="row">
+                                <div class="row form_css">
                                     <div class="col-md-12">
-                                        Login
-                                        <form class="form" role="form"  th:method="post" th:action="@{/user/login}"
-                                              accept-charset="UTF-8"
-                                              id="login-nav">
-                                            <div class="form-group">
-                                                <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                                                <input type="email" class="form-control" th:text="@{email}" id="exampleInputEmail2"
-                                                       placeholder="Email address" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="sr-only" for="exampleInputPassword2">Password</label>
-                                                <input type="password" class="form-control" th:text="@{password}" id="exampleInputPassword2"
-                                                       placeholder="Password" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-                                            </div>
+                                        <p>Enter Data:</p>
+                                        <form class="col-md-12" action="/user/login" th:method="post">
+                                            <p>Email: <input class="form-control col-md-12" type="text" name="email"/>
+                                            </p>
+                                            <p>Password: <input class="form-control col-md-12" type="text"
+                                                                name="password"/></p>
+                                            <p><input class="btn btn-success" type="submit" value="Submit"/>
+                                            <p><input class="btn btn-primary" type="reset" value="Reset"/></p>
                                         </form>
                                     </div>
                                 </div>
@@ -75,4 +72,6 @@
         </div><!-- /.container-fluid -->
     </nav>
 </div>
+<div th:replace="jsScripts :: scripts"></div>
+</body>
 </html>
