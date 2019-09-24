@@ -25,7 +25,7 @@
             <td th:text="${galleryEntity.getDescription()}"></td>
             <td th:text="${galleryEntity.getIdUser()}"></td>
             <td th:text="${galleryEntity.getIdGalEnt()}"></td>
-            <td><img th:src="@{'data:image/jpeg;base64,' + ${galleryEntity.getFile()}}"></td>
+            <td><img class="icon_img" th:src="@{'data:image/jpeg;base64,' + ${galleryEntity.getFile()}}"></td>
         </tr>
         </tbody>
     </table>
