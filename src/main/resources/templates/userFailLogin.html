@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="nav :: nav"></div>
+<p>try again or Register User</p>
+<div>
+    <form class="col-md-4" action="#" th:action="@{add}" th:object="${newUser}" th:method="post">
+        <p>Name: <input class="form-control" type="text" th:field="*{name}"/></p>
+        <p>Phone: <input class="form-control" type="text" th:field="*{phone}"/></p>
+        <p>Email: <input class="form-control" type="text" th:field="*{email}"/></p>
+        <p>Status: <input class="form-control" type="text" th:field="*{status}"/></p>
+        <p>Country: <input class="form-control" type="text" th:field="*{country}"/></p>
+        <p>Login: <input class="form-control" type="text" th:field="*{login}"/></p>
+        <p>Password: <input class="form-control" type="text" th:field="*{pass}"/></p>
+        <p><input class="btn btn-success" type="submit" value="Submit"/> <input class="btn btn-primary" type="reset"
+                                                                                value="Reset"/></p>
+    </form>
+</div>
+<div align="center" class="col-md-12 form-select-button">
+    <form action="/user/add_photo" enctype="multipart/form-data" method="post">
+        Photo: <input id="upload" type="file" name="photo"/>
+        <br/>
+        Photo name: <input type="text" name="fname"><br>
+        <br/>
+        <input class="btn btn-inf" type="submit" value="Send to Gallery"/>
+    </form>
+    <br/>
+    <div class="btn btn-warning" id="users_get" onclick="get_list()">Click</div>
+</div>
+<div th:replace="jsScripts :: scripts"></div>
+</body>
+</html>

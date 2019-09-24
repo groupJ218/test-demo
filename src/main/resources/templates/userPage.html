@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="nav :: nav"></div>
+<div class="row col-lg-12">
+    <!--Table with users-->
+    <table class="table table-striped table-responsive" id="user-table">
+        <thead class="thead">
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Country</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody id="user-table-body">
+            <td th:text="${uzer.getName()}"></td>
+            <td th:text="${uzer.getPhone()}"></td>
+            <td th:text="${uzer.getCountry()}"></td>
+            <td th:text="${uzer.getEmail()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div align="center" class="col-md-12 form-select-button">
+    <form action="/user/add_photo" enctype="multipart/form-data" method="post">
+        Photo: <input id="upload" type="file" name="photo"/>
+        <br/>
+        Photo name: <input type="text" name="fname"><br>
+        <br/>
+        <input class="btn btn-inf" type="submit" value="Send to Gallery"/>
+    </form>
+    <br/>
+    <div class="btn btn-warning" id="users_get" onclick="get_list()">Click</div>
+</div>
+<div th:replace="jsScripts :: scripts"></div>
+</body>
+</html>
