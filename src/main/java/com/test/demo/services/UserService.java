@@ -55,6 +55,14 @@ public class UserService {
         return user;
     }
 
+    public User findUserByEmail(String email) {
+        User user = new User();
+        MongoCollection coll = MongoFactory.getCollection(db_collection);
+        // Fetching the record object from the mongo database.
+        Document doc = (Document) coll.find(eq("email", email)).first();
+        return null != doc ? setDocToUser(doc, user) : null;
+    }
+
     // Add a new user to the mongo database.
     public Boolean addUser(User user) {
         boolean output;
@@ -75,7 +83,7 @@ public class UserService {
         return output;
     }
 
-    private void setDocToUser(Document doc, User user) {
+    private User setDocToUser(Document doc, User user) {
         user.setIdUser(doc.get(("idUser")).toString());
         user.setName(doc.get(("name")).toString());
         user.setPhone(doc.get(("phone")).toString());
@@ -84,6 +92,7 @@ public class UserService {
         user.setCountry(doc.get(("country")).toString());
         user.setLogin(doc.get(("login")).toString());
         user.setPass(doc.get(("pass")).toString());
+        return user;
     }
 
     private void editUserToDoc(User user, Document doc) {

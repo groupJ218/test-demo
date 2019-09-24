@@ -40,6 +40,39 @@ public class UserController {
         return "user";
     }
 
+//    @PostMapping("/login")
+//    public String loginUser() {
+//        log.warning("Income user data: ");
+//
+//        return "redirect:/user/list";
+//    }
+
+    @PostMapping("/login")
+    public String loginUser(Model model, @RequestParam("email") String email, @RequestParam("password") String  password) {
+        log.warning("=========================START Login=============================");
+        String message = "";
+        User user = userService.findUserByEmail(email);
+        if (null == user){ message = "no Such User ";}
+        if (null != user && !user.getPass().equals(password)){message = "wrong password!!!";}
+
+        if ("wrong password!!!".equals(message) ) {
+            model.addAttribute("mess", message);
+            log.warning("=========================Password Fail=============================");
+            return "index";
+        } else if (!"".equals(message)) {
+            model.addAttribute("newUser", new User());
+            model.addAttribute("mess", message);
+            log.warning("=========================Login Fail=============================");
+            return "userFailLogin";
+        } else {
+            message = "ok";
+            model.addAttribute("uzer", user);
+            model.addAttribute("mess", message);
+            log.warning("=========================Login Success=============================");
+            return "userPage";
+        }
+    }
+
     @PostMapping("/add")
     public String greetingSubmit(@ModelAttribute User uzer) {
         log.warning("Income user: " + uzer.toString());

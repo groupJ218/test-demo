@@ -1,3 +1,11 @@
-img{
+.icon_img {
     height: 50px;
+}
+
+.form-control {
+   width: 94%;
+}
+
+.form_css {
+    text-align: center;
 }

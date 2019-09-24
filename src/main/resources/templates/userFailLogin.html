@@ -7,27 +7,7 @@
 </head>
 <body>
 <div th:replace="nav :: nav"></div>
-<div class="row col-lg-12">
-    <!--Table with users-->
-    <table class="table table-striped table-responsive" id="user-table">
-        <thead class="thead">
-        <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Country</th>
-            <th>Email</th>
-        </tr>
-        </thead>
-        <tbody id="user-table-body">
-        <tr th:each="uzer : ${users}">
-            <td th:text="${uzer.getName()}"></td>
-            <td th:text="${uzer.getPhone()}"></td>
-            <td th:text="${uzer.getCountry()}"></td>
-            <td th:text="${uzer.getEmail()}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<p>try again or Register User</p>
 <div>
     <form class="col-md-4" action="#" th:action="@{add}" th:object="${newUser}" th:method="post">
         <p>Name: <input class="form-control" type="text" th:field="*{name}"/></p>
