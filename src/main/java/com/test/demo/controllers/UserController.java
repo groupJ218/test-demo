@@ -48,14 +48,18 @@ public class UserController {
 //    }
 
     @PostMapping("/login")
-    public String loginUser(Model model, @RequestParam("email") String email, @RequestParam("password") String  password) {
+    public String loginUser(Model model, @RequestParam("email") String email, @RequestParam("password") String password) {
         log.warning("=========================START Login=============================");
         String message = "";
         User user = userService.findUserByEmail(email);
-        if (null == user){ message = "no Such User ";}
-        if (null != user && !user.getPass().equals(password)){message = "wrong password!!!";}
+        if (null == user) {
+            message = "no Such User ";
+        }
+        if (null != user && !user.getPass().equals(password)) {
+            message = "wrong password!!!";
+        }
 
-        if ("wrong password!!!".equals(message) ) {
+        if ("wrong password!!!".equals(message)) {
             model.addAttribute("mess", message);
             log.warning("=========================Password Fail=============================");
             return "index";
@@ -74,10 +78,25 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public String greetingSubmit(@ModelAttribute User uzer) {
+    public String greetingSubmit(Model model, @ModelAttribute User uzer) {
         log.warning("Income user: " + uzer.toString());
-        userService.addUser(uzer);
-        return "redirect:/user/list";
+        if (checkUser(uzer)) {
+            model.addAttribute("mess", "not valid data");
+            model.addAttribute("newUser", new User());
+            return "userFailLogin";
+        } else if (isUserEmail(uzer)) {
+            model.addAttribute("mess", "Email is busy");
+            model.addAttribute("newUser", new User());
+            return "userFailLogin";
+        } else if (isUserLogin(uzer)) {
+            model.addAttribute("mess", "Login is busy");
+            model.addAttribute("newUser", new User());
+            return "userFailLogin";
+        } else {
+            userService.addUser(uzer);
+            model.addAttribute("uzer", uzer);
+            return "userPage";
+        }
     }
 
     // Opening the edit user form page.
@@ -129,7 +148,7 @@ public class UserController {
 
 
         log.warning("!!!!Debug in controller");
-        log.warning("!!!! File name: "+ fileName);
+        log.warning("!!!! File name: " + fileName);
         if (photo.isEmpty()) {
             log.warning("!!photo is empty!!");
             model.addAttribute("message", "you don`t choose photo");
@@ -146,5 +165,32 @@ public class UserController {
             throw new IOException();
         }
         return "redirect:/user/list";
+    }
+
+    private boolean checkUser(User user) {
+        if (null == user.getName()
+                || user.getCountry().isEmpty()
+                || user.getEmail().isEmpty()
+                || user.getPhone().isEmpty()
+                || user.getStatus().isEmpty()
+                || user.getLogin().isEmpty()
+                || user.getPass().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isUserLogin(User user) {
+        if (null == userService.findUserByLogin(user.getLogin())) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isUserEmail(User user) {
+        if (null == userService.findUserByEmail(user.getEmail())) {
+            return false;
+        }
+        return true;
     }
 }

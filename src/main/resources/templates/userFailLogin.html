@@ -7,31 +7,93 @@
 </head>
 <body>
 <div th:replace="nav :: nav"></div>
-<p>try again or Register User</p>
-<div>
-    <form class="col-md-4" action="#" th:action="@{add}" th:object="${newUser}" th:method="post">
-        <p>Name: <input class="form-control" type="text" th:field="*{name}"/></p>
-        <p>Phone: <input class="form-control" type="text" th:field="*{phone}"/></p>
-        <p>Email: <input class="form-control" type="text" th:field="*{email}"/></p>
-        <p>Status: <input class="form-control" type="text" th:field="*{status}"/></p>
-        <p>Country: <input class="form-control" type="text" th:field="*{country}"/></p>
-        <p>Login: <input class="form-control" type="text" th:field="*{login}"/></p>
-        <p>Password: <input class="form-control" type="text" th:field="*{pass}"/></p>
-        <p><input class="btn btn-success" type="submit" value="Submit"/> <input class="btn btn-primary" type="reset"
-                                                                                value="Reset"/></p>
-    </form>
+<div class="container bootstrap snippet">
+    <div class="row">
+        <div class="col-sm-9">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#home">Register User</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <hr>
+                    <form class="form" action="#" th:action="@{add}" th:object="${newUser}" th:method="post">
+                        <!--                    <form class="form" action="##" method="post" id="registrationForm">-->
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="name"><h4>Name</h4></label>
+                                <input class="form-control" type="text" id="name" th:field="*{name}"/>
+                                <!--                                <input type="text" class="form-control" name="name" id="name" placeholder="enter name" title="enter your name." th:field="*{name}">-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="phone"><h4>Phone</h4></label>
+                                <input class="form-control" type="text" id="phone" th:field="*{phone}"/>
+                                <!--                                <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number." th:field="*{phone}">-->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="email"><h4>Email</h4></label>
+                                <input class="form-control" type="text" id="email" th:field="*{email}"/>
+                                <!--                                <input type="text" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email." th:field="*{email}">-->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="status"><h4>Status</h4></label>
+                                <input class="form-control" type="text" id="status" th:field="*{status}"/>
+                                <!--                                <input type="text" class="form-control" name="status" id="status" placeholder="enter status" title="enter your status." th:field="*{status}">-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="country"><h4>Country</h4></label>
+                                <input class="form-control" type="text" id="country" th:field="*{country}"/>
+                                <!--                                <input type="text" class="form-control" name="country" id="country" placeholder="enter country" title="enter your country." th:field="*{country}">-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="login"><h4>Login</h4></label>
+                                <input class="form-control" type="text" id="login" th:field="*{login}"/>
+                                <!--                                <input type="text" class="form-control" name="login" id="login" placeholder="enter login" title="enter your login." th:field="*{login}">-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="password"><h4>Password</h4></label>
+                                <input class="form-control" type="text" id="password" th:field="*{pass}"/>
+                                <!--                                <input type="text" class="form-control" name="password" id="password" placeholder="password" title="enter your password." th:field="*{pass}>-->
+                            </div>
+                        </div>
+                        <div class=" form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button class="btn btn-lg btn-success" type="submit"><i
+                                        class="glyphicon glyphicon-ok-sign"></i> Save
+                                </button>
+                                <button class="btn btn-lg" type="reset"><i
+                                        class="glyphicon glyphicon-repeat"></i>
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
-<div align="center" class="col-md-12 form-select-button">
-    <form action="/user/add_photo" enctype="multipart/form-data" method="post">
-        Photo: <input id="upload" type="file" name="photo"/>
-        <br/>
-        Photo name: <input type="text" name="fname"><br>
-        <br/>
-        <input class="btn btn-inf" type="submit" value="Send to Gallery"/>
-    </form>
-    <br/>
-    <div class="btn btn-warning" id="users_get" onclick="get_list()">Click</div>
-</div>
+
+
 <div th:replace="jsScripts :: scripts"></div>
 </body>
 </html>
