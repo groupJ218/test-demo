@@ -8,7 +8,4 @@ public class Const {
     // PAGES
     public static String PAGE_USER_PAGE = "userPage";
     public static String PAGE_USER_FAIL_LOGIN = "userFailLogin";
-
-    public Const() {
-    }
 }
