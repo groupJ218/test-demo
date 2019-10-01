@@ -15,11 +15,12 @@
         </div>
         <div class="col-md-6 details">
             <blockquote>
-                <h5 th:text="${uzer.getName()}"></h5>
-                <small><cite title="Source Title" th:text="${uzer.getCountry()}"> <i class="icon-map-marker"></i></cite></small>
+                <b><p> Hello Everybody, I am: </p></b>
+                <h4 th:text="${uzer.getName()}"></h4>
+            <small><cite title="Source Title" th:text="${uzer.getCountry()}"><i class="icon-map-marker"></i></cite></small>
             </blockquote>
             <p>
-            <td th:text="${uzer.getName()}"></td>
+            <p><td th:text="${uzer.getName()}"></td></p>
             <td th:text="${uzer.getPhone()}"></td>
             <td th:text="${uzer.getCountry()}"></td>
             <td th:text="${uzer.getEmail()}"></td>

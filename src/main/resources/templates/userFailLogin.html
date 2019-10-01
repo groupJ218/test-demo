@@ -17,21 +17,18 @@
                 <div class="tab-pane active" id="home">
                     <hr>
                     <form class="form" action="#" th:action="@{add}" th:object="${newUser}" th:method="post">
-                        <!--                    <form class="form" action="##" method="post" id="registrationForm">-->
                         <div class="form-group">
 
                             <div class="col-xs-6">
                                 <label for="name"><h4>Name</h4></label>
-                                <input class="form-control" type="text" id="name" th:field="*{name}"/>
-                                <!--                                <input type="text" class="form-control" name="name" id="name" placeholder="enter name" title="enter your name." th:field="*{name}">-->
+                                <input class="form-control" type="text" name="name" id="name" placeholder="enter name" title="enter your name." th:field="*{name}"/>
                             </div>
                         </div>
                         <div class="form-group">
 
                             <div class="col-xs-6">
                                 <label for="phone"><h4>Phone</h4></label>
-                                <input class="form-control" type="text" id="phone" th:field="*{phone}"/>
-                                <!--                                <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number." th:field="*{phone}">-->
+                                <input class="form-control" type="text" id="phone" placeholder="enter phone" title="enter your phone number." th:field="*{phone}"/>
                             </div>
                         </div>
 
@@ -39,37 +36,32 @@
 
                             <div class="col-xs-6">
                                 <label for="email"><h4>Email</h4></label>
-                                <input class="form-control" type="text" id="email" th:field="*{email}"/>
-                                <!--                                <input type="text" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email." th:field="*{email}">-->
+                                <input class="form-control" type="text" id="email" placeholder="you@email.com" title="enter your email." th:field="*{email}"/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="status"><h4>Status</h4></label>
-                                <input class="form-control" type="text" id="status" th:field="*{status}"/>
-                                <!--                                <input type="text" class="form-control" name="status" id="status" placeholder="enter status" title="enter your status." th:field="*{status}">-->
+                                <input class="form-control" type="text" id="status" placeholder="enter status" title="enter your status." th:field="*{status}"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="country"><h4>Country</h4></label>
-                                <input class="form-control" type="text" id="country" th:field="*{country}"/>
-                                <!--                                <input type="text" class="form-control" name="country" id="country" placeholder="enter country" title="enter your country." th:field="*{country}">-->
+                                <input class="form-control" type="text" id="country" placeholder="enter country" title="enter your country." th:field="*{country}"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="login"><h4>Login</h4></label>
-                                <input class="form-control" type="text" id="login" th:field="*{login}"/>
-                                <!--                                <input type="text" class="form-control" name="login" id="login" placeholder="enter login" title="enter your login." th:field="*{login}">-->
+                                <input class="form-control" type="text" id="login" placeholder="enter login" title="enter your login." th:field="*{login}"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="password"><h4>Password</h4></label>
-                                <input class="form-control" type="text" id="password" th:field="*{pass}"/>
-                                <!--                                <input type="text" class="form-control" name="password" id="password" placeholder="password" title="enter your password." th:field="*{pass}>-->
+                                <input class="form-control" type="text" id="password" placeholder="password" title="enter your password." th:field="*{pass}"/>
                             </div>
                         </div>
                         <div class=" form-group">
