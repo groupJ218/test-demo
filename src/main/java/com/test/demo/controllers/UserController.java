@@ -43,28 +43,21 @@ public class UserController {
         log.warning("=========================START Login=============================");
         String message = "";
         User user = userService.findUserByEmail(email);
-        if (null == user) {
-            message = "no Such User ";
-        }
-        if (null != user && !user.getPass().equals(password)) {
-            message = "wrong password!!!";
-        }
+        message = (null == user) ? Const.ERR_NO_SUCH_USER :
+                !user.getPass().equals(password) ? Const.ERR_WRONG_PASSWORD : "";
+        model.addAttribute("mess", message);
 
-        if ("wrong password!!!".equals(message)) {
-            model.addAttribute("mess", message);
+        if (message.equals(Const.ERR_WRONG_PASSWORD)) {
             log.warning("=========================Password Fail=============================");
-            return "index";
+            return Const.PAGE_MAIN;
         } else if (!"".equals(message)) {
             model.addAttribute("newUser", new User());
-            model.addAttribute("mess", message);
             log.warning("=========================Login Fail=============================");
-            return "userFailLogin";
+            return Const.PAGE_USER_FAIL_LOGIN;
         } else {
-            message = "ok";
             model.addAttribute("uzer", user);
-            model.addAttribute("mess", message);
             log.warning("=========================Login Success=============================");
-            return "userPage";
+            return Const.PAGE_USER_PAGE;
         }
     }
 
@@ -103,7 +96,7 @@ public class UserController {
             log.info("!!!!!!!!Success update user with idUser {"
                     + user.toString() + "}");
         }
-        return "redirect:/user/list";
+        return Const.SERVICE_REDIRECT + Const.URL_USER_LIST;
     }
 
     // Deleting the specified user.
@@ -117,7 +110,7 @@ public class UserController {
         } else {
             log.warning("Unable to delete. User with id {" + idUser + "} not found.");
         }
-        return "redirect:/user/list";
+        return Const.SERVICE_REDIRECT + Const.URL_USER_LIST;
     }
 
     @RequestMapping(value = "/one_user/{idUser}", method = RequestMethod.GET)
@@ -128,26 +121,8 @@ public class UserController {
         return "user";
     }
 
-    @RequestMapping(value = "/add_photo", method = RequestMethod.POST)
-    public String onAddPhoto(Model model, @RequestParam("photo") MultipartFile photo, @RequestParam("fname") String fileName) throws Exception {
-        log.warning("!!!!Debug in controller");
-        if (photo.isEmpty()) {
-            log.warning("!!photo is empty!!");
-            model.addAttribute("message", "you don`t choose photo");
-        }
-        try {
-            long id = System.currentTimeMillis();
-            photos.put(id, photo.getBytes());
-            model.addAttribute("photo_id", id);
-            getPersons(model);
-        } catch (IOException e) {
-            throw new IOException();
-        }
-        return "redirect:/user/list";
-    }
-
     private boolean checkUser(User user) {
-        return null == user.getName()
+     return user.getName() == null
                 || user.getCountry().isEmpty()
                 || user.getEmail().isEmpty()
                 || user.getPhone().isEmpty()
