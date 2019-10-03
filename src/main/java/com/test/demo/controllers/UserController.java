@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -37,9 +38,22 @@ public class UserController {
         log.warning("=========================END get User List method=============================");
         return "user";
     }
+    @RequestMapping(value = "/mypage", method = RequestMethod.GET)
+    public String getPersons(HttpSession session, Model model) {
+        log.warning("=========================START To USER PAGE=============================");
+        String id = (String) session.getAttribute("id_user");
+        User user = (null == id)  ? new User() : userService.findUserById(id);
+        if(null == id && null == user.getLogin()){
+            model.addAttribute("newUser", user);
+            return Const.PAGE_MAIN;
+        } else{
+            model.addAttribute("uzer", user);
+            return Const.PAGE_USER_PAGE;
+        }
+    }
 
     @PostMapping("/login")
-    public String loginUser(Model model, @RequestParam("email") String email, @RequestParam("password") String password) {
+    public String loginUser(HttpSession session,  Model model, @RequestParam("email") String email, @RequestParam("password") String password) {
         log.warning("=========================START Login=============================");
         String message = "";
         User user = userService.findUserByEmail(email);
@@ -55,6 +69,7 @@ public class UserController {
             log.warning("=========================Login Fail=============================");
             return Const.PAGE_USER_FAIL_LOGIN;
         } else {
+            session.setAttribute("id_user", user.getIdUser());
             model.addAttribute("uzer", user);
             log.warning("=========================Login Success=============================");
             return Const.PAGE_USER_PAGE;

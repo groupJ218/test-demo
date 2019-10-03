@@ -30,7 +30,6 @@ public class GalleryService {
         MongoCursor<Document> cursor = coll.find().iterator();
         while (cursor.hasNext()) {
             Document doc = cursor.next();
-            GalleryEntity galleryEntity = new GalleryEntity();
             String classNameValue;
             try {
                 classNameValue = (String) doc.get("className");
@@ -38,17 +37,47 @@ public class GalleryService {
                 classNameValue = null;
             }
             if (!doc.isEmpty() && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)) {
-                galleryEntity.setIdGalEnt(doc.get("idGalEnt").toString());
-                galleryEntity.setGalleryName(doc.get("galleryName").toString());
-                galleryEntity.setDescription(doc.get("description").toString());
-                galleryEntity.setIdUser(doc.get("idUser").toString());
-                if (doc.get("file") == null) {
-                    galleryEntity.setFile(null);
-                    log.warning("No file");
-                } else {
-                    galleryEntity.setFile(doc.get("file").toString());
-                }
-                gallery_list.add(galleryEntity);
+                convertDocToGalleryList(gallery_list, doc);
+            }
+        }
+        return gallery_list;
+    }
+
+    private void convertDocToGalleryList(List gallery_list, Document doc) {
+        GalleryEntity galleryEntity = new GalleryEntity();
+        galleryEntity.setIdGalEnt(doc.get("idGalEnt").toString());
+        galleryEntity.setGalleryName(doc.get("galleryName").toString());
+        galleryEntity.setDescription(doc.get("description").toString());
+        galleryEntity.setIdUser(doc.get("idUser").toString());
+        if (doc.get("file") == null) {
+            galleryEntity.setFile(null);
+            log.warning("No file");
+        } else {
+            galleryEntity.setFile(doc.get("file").toString());
+        }
+        gallery_list.add(galleryEntity);
+    }
+
+    //Fetch all galleryEntity from the mongo database.
+    public List getAllById(String idUser) {
+        List gallery_list = new ArrayList();
+        MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
+
+        //Fetching cursor object for iterating on the database records.
+        MongoCursor<Document> cursor = coll.find().iterator();
+        while (cursor.hasNext()) {
+            Document doc = cursor.next();
+            GalleryEntity galleryEntity = new GalleryEntity();
+            String classNameValue;
+            try {
+                classNameValue = (String) doc.get("className");
+            } catch (NullPointerException e) {
+                classNameValue = null;
+            }
+            if (!doc.isEmpty()
+                    && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)
+                    && (doc.get("idUser").toString().equals(idUser))) {
+                convertDocToGalleryList(gallery_list, doc);
             }
         }
         return gallery_list;

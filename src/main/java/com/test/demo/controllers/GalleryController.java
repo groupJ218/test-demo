@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -25,13 +26,11 @@ public class GalleryController {
     // Displaying the initial gallery list.
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String getPersons(Model model) {
+    public String getPersons(HttpSession session,  Model model) {
         log.warning("---------------------START get Gallery LIST method----------------------");
-        String img = galleryService.findGallById("bda467e4-5ea7-4b78-b175-8f6972bd2b5e").getFile();
-        log.warning("String img :" + img);
-        List gall_list = galleryService.getAll();
+        String id =(String) session.getAttribute("id_user");
+        List gall_list = galleryService.getAllById(id);
         model.addAttribute("newGall", new GalleryEntity());
-        model.addAttribute("image", "data:image/jpeg;base64,"+img);
         model.addAttribute("gallery", gall_list);
         log.warning("GalleryEntity" + gall_list.toString());
         log.warning("---------------------END get Gallery LIST method----------------------");
@@ -40,14 +39,15 @@ public class GalleryController {
 
     // Opening the add new gallery form page.
     @PostMapping("/add")
-    public String addGall(@RequestParam("file") MultipartFile file, @RequestParam("galleryName") String galleryName,
-                          @RequestParam("description") String description, @RequestParam("idUser") String idUser) {
+    public String addGall(HttpSession session, @RequestParam("file") MultipartFile file, @RequestParam("galleryName") String galleryName,
+                          @RequestParam("description") String description) {
+        String id = session.getAttribute("id_user").toString();
         log.warning("---------------------START ADD method----------------------");
-        log.warning("Income Params: " + galleryName + ", " + description + ", " + idUser);
+        log.warning("Income Params: " + galleryName + ", " + description + ", " + id);
         GalleryEntity galleryEntity = new GalleryEntity();
         galleryEntity.setDescription(description);
         galleryEntity.setGalleryName(galleryName);
-        galleryEntity.setIdUser(idUser);
+        galleryEntity.setIdUser(id);
         try {
             galleryEntity.setFile(Base64.getEncoder().encodeToString(file.getBytes()));
         } catch (IOException e) {
