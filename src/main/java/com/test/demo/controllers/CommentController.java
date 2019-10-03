@@ -2,6 +2,7 @@ package com.test.demo.controllers;
 
 import com.test.demo.models.Comment;
 import com.test.demo.services.CommentService;
+import com.test.demo.utils.sys.Const;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class CommentController {
     public String addComment(@ModelAttribute Comment comment){
         log.warning("Income comment: " + comment.toString());
         commentService.addComment(comment);
-        return "redirect:/comment/list";
+        return Const.SERVICE_REDIRECT + Const.URL_COMMENT_LIST;
     }
 
     // Opening the edit comment form page.
@@ -49,7 +50,7 @@ public class CommentController {
             commentService.editComment(comment);
             log.info("!!!!!!!!Success update comment with id {" + comment.toString() + "}");
         }
-        return "redirect:/comment/list";
+        return Const.SERVICE_REDIRECT + Const.URL_COMMENT_LIST;
     }
 
     // Deleting the specified comment.
@@ -63,7 +64,7 @@ public class CommentController {
         } else {
             log.warning("Unable to delete. Comment with id {" + idComment + "} not found.");
         }
-        return "redirect:/comment/list";
+        return Const.SERVICE_REDIRECT + Const.URL_COMMENT_LIST;
     }
 
     @RequestMapping(value = "/one_comment/{idComment}", method = RequestMethod.GET)

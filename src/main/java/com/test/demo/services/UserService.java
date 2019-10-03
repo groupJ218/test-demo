@@ -62,6 +62,14 @@ public class UserService {
         Document doc = (Document) coll.find(eq("email", email)).first();
         return null != doc ? setDocToUser(doc, user) : null;
     }
+    public User findUserByLogin(String login) {
+        User user = new User();
+        MongoCollection coll = MongoFactory.getCollection(db_collection);
+        // Fetching the record object from the mongo database.
+        Document doc = (Document) coll.find(eq("login", login)).first();
+        return null != doc ? setDocToUser(doc, user) : null;
+    }
+
 
     // Add a new user to the mongo database.
     public Boolean addUser(User user) {

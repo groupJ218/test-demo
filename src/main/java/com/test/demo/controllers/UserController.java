@@ -1,18 +1,16 @@
 package com.test.demo.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.demo.models.User;
 import com.test.demo.services.UserService;
+import com.test.demo.utils.sys.Const;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,44 +38,46 @@ public class UserController {
         return "user";
     }
 
-//    @PostMapping("/login")
-//    public String loginUser() {
-//        log.warning("Income user data: ");
-//
-//        return "redirect:/user/list";
-//    }
-
     @PostMapping("/login")
-    public String loginUser(Model model, @RequestParam("email") String email, @RequestParam("password") String  password) {
+    public String loginUser(Model model, @RequestParam("email") String email, @RequestParam("password") String password) {
         log.warning("=========================START Login=============================");
         String message = "";
         User user = userService.findUserByEmail(email);
-        if (null == user){ message = "no Such User ";}
-        if (null != user && !user.getPass().equals(password)){message = "wrong password!!!";}
+        message = (null == user) ? Const.ERR_NO_SUCH_USER :
+                !user.getPass().equals(password) ? Const.ERR_WRONG_PASSWORD : "";
+        model.addAttribute("mess", message);
 
-        if ("wrong password!!!".equals(message) ) {
-            model.addAttribute("mess", message);
+        if (message.equals(Const.ERR_WRONG_PASSWORD)) {
             log.warning("=========================Password Fail=============================");
-            return "index";
+            return Const.PAGE_MAIN;
         } else if (!"".equals(message)) {
             model.addAttribute("newUser", new User());
-            model.addAttribute("mess", message);
             log.warning("=========================Login Fail=============================");
-            return "userFailLogin";
+            return Const.PAGE_USER_FAIL_LOGIN;
         } else {
-            message = "ok";
             model.addAttribute("uzer", user);
-            model.addAttribute("mess", message);
             log.warning("=========================Login Success=============================");
-            return "userPage";
+            return Const.PAGE_USER_PAGE;
         }
     }
 
     @PostMapping("/add")
-    public String greetingSubmit(@ModelAttribute User uzer) {
-        log.warning("Income user: " + uzer.toString());
-        userService.addUser(uzer);
-        return "redirect:/user/list";
+    public String greetingSubmit(Model model, @ModelAttribute User user) {
+        String error;
+        log.warning("Income user: " + user.toString());
+        log.warning("---------------------START ADD USER----------------------");
+        error = checkUser(user) ? Const.ERR_NOT_VALID_DATA :
+                isUserEmail(user) ? Const.ERR_EMAIL_IS_BUSY :
+                        isUserLogin(user) ? Const.ERR_LOGIN_IS_BUSY : "";
+        model.addAttribute("mess", error);
+        if (error.isEmpty()) {
+            userService.addUser(user);
+            model.addAttribute("uzer", user);
+        } else {
+            model.addAttribute("newUser", new User());
+        }
+        log.warning("---------------------END ADD USER----------------------");
+        return error.isEmpty() ? Const.PAGE_USER_PAGE : Const.PAGE_USER_FAIL_LOGIN;
     }
 
     // Opening the edit user form page.
@@ -99,7 +99,7 @@ public class UserController {
             log.info("!!!!!!!!Success update user with idUser {"
                     + user.toString() + "}");
         }
-        return "redirect:/user/list";
+        return Const.SERVICE_REDIRECT + Const.URL_USER_LIST;
     }
 
     // Deleting the specified user.
@@ -113,7 +113,7 @@ public class UserController {
         } else {
             log.warning("Unable to delete. User with id {" + idUser + "} not found.");
         }
-        return "redirect:/user/list";
+        return Const.SERVICE_REDIRECT + Const.URL_USER_LIST;
     }
 
     @RequestMapping(value = "/one_user/{idUser}", method = RequestMethod.GET)
@@ -124,27 +124,21 @@ public class UserController {
         return "user";
     }
 
-    @RequestMapping(value = "/add_photo", method = RequestMethod.POST)
-    public String onAddPhoto(Model model, @RequestParam("photo") MultipartFile photo, @RequestParam("fname") String fileName) throws Exception {
+    private boolean checkUser(User user) {
+     return user.getName() == null
+                || user.getCountry().isEmpty()
+                || user.getEmail().isEmpty()
+                || user.getPhone().isEmpty()
+                || user.getStatus().isEmpty()
+                || user.getLogin().isEmpty()
+                || user.getPass().isEmpty();
+    }
 
+    private boolean isUserLogin(User user) {
+        return null != userService.findUserByLogin(user.getLogin());
+    }
 
-        log.warning("!!!!Debug in controller");
-        log.warning("!!!! File name: "+ fileName);
-        if (photo.isEmpty()) {
-            log.warning("!!photo is empty!!");
-            model.addAttribute("message", "you don`t choose photo");
-        }
-        log.warning("Photo not empty try get file");
-        try {
-            long id = System.currentTimeMillis();
-            log.warning("File is " + photo.getBytes());
-            photos.put(id, photo.getBytes());
-            model.addAttribute("photo_id", id);
-            log.warning("redirect to user list!!");
-            getPersons(model);
-        } catch (IOException e) {
-            throw new IOException();
-        }
-        return "redirect:/user/list";
+    private boolean isUserEmail(User user) {
+        return null != userService.findUserByEmail(user.getEmail());
     }
 }
