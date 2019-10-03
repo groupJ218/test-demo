@@ -16,14 +16,35 @@
         <div class="col-md-6 details">
             <blockquote>
                 <b><p> Hello Everybody, I am: </p></b>
-                <h4 th:text="${uzer.getName()}"></h4>
-            <small><cite title="Source Title" th:text="${uzer.getCountry()}"><i class="icon-map-marker"></i></cite></small>
+                <h3>
+                    <td th:text="${uzer.getName()}"></td>
+                    <i class="fa fa-smile-o fa-fw" aria-hidden="true"></i>
+                </h3>
+                <small><i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
+                        <cite title="Source Title" th:text="${uzer.getStatus()}"><i
+                        class="icon-map-marker"></i></cite><i class="fa fa-quote-right fa-fw" aria-hidden="true"></i></small>
             </blockquote>
             <p>
-            <p><td th:text="${uzer.getName()}"></td></p>
-            <td th:text="${uzer.getPhone()}"></td>
-            <td th:text="${uzer.getCountry()}"></td>
-            <td th:text="${uzer.getEmail()}"></td>
+            <div>
+                </br>
+                <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                <td th:text="${uzer.getName()}"></td>
+            </div>
+            <div>
+                </br>
+                <i class="fa fa-phone fa-fw" aria-hidden="true"></i>
+                <td th:text="${uzer.getPhone()}"></td>
+            </div>
+            <div>
+                </br>
+                <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                <td th:text="${uzer.getCountry()}"></td>
+            </div>
+            <div>
+                </br>
+                <i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>
+                <td th:text="${uzer.getEmail()}"></td>
+            </div>
             </p>
         </div>
     </div>

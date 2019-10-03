@@ -2,6 +2,7 @@ package com.test.demo.controllers;
 
 import com.test.demo.models.GalleryEntity;
 import com.test.demo.services.GalleryService;
+import com.test.demo.utils.sys.Const;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +55,7 @@ public class GalleryController {
         }
         galleryService.addGall(galleryEntity);
         log.warning("---------------------FINISH ADD method----------------------");
-        return "redirect:/gallery/list";
+        return Const.SERVICE_REDIRECT + Const.URL_GALLERY_LIST;
     }
 
     // Opening the edit gallery form page.
@@ -71,7 +72,7 @@ public class GalleryController {
             log.info("!!!!!!!!Success update comment with idGalEnt {"
                     + gallEnt.toString() + "}");
         }
-        return "redirect:/gallery/list";
+        return Const.SERVICE_REDIRECT + Const.URL_GALLERY_LIST;
     }
 
     // Deleting the specified gallery.
@@ -85,7 +86,7 @@ public class GalleryController {
         } else {
             log.warning("Unable to delete. Gallery with idGalEnt {" + idGalEnt + "} not found.");
         }
-        return "redirect:/gallery/list";
+        return Const.SERVICE_REDIRECT + Const.URL_GALLERY_LIST;
     }
 
     @RequestMapping(value = "/one_gallery/{idGalEnt}", method = RequestMethod.GET)

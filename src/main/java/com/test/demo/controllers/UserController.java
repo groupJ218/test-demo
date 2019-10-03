@@ -65,15 +65,18 @@ public class UserController {
     public String greetingSubmit(Model model, @ModelAttribute User user) {
         String error;
         log.warning("Income user: " + user.toString());
+        log.warning("---------------------START ADD USER----------------------");
         error = checkUser(user) ? Const.ERR_NOT_VALID_DATA :
                 isUserEmail(user) ? Const.ERR_EMAIL_IS_BUSY :
                         isUserLogin(user) ? Const.ERR_LOGIN_IS_BUSY : "";
         model.addAttribute("mess", error);
         if (error.isEmpty()) {
+            userService.addUser(user);
             model.addAttribute("uzer", user);
         } else {
             model.addAttribute("newUser", new User());
         }
+        log.warning("---------------------END ADD USER----------------------");
         return error.isEmpty() ? Const.PAGE_USER_PAGE : Const.PAGE_USER_FAIL_LOGIN;
     }
 

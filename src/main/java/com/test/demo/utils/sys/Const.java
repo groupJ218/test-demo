@@ -13,6 +13,8 @@ public class Const {
     public static String PAGE_USER_FAIL_LOGIN = "userFailLogin";
     // URLs
     public  static String URL_USER_LIST = "/user/list";
+    public  static String URL_COMMENT_LIST = "/comment/list";
+    public  static String URL_GALLERY_LIST = "/gallery/list";
     // SERVICE
     public static String SERVICE_REDIRECT = "redirect:";
 }
