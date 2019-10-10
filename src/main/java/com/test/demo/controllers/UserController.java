@@ -1,17 +1,15 @@
 package com.test.demo.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.demo.models.User;
 import com.test.demo.services.UserService;
 import com.test.demo.utils.sys.Const;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,29 +29,38 @@ public class UserController {
     public String getPersons(Model model) {
         log.warning("=========================START get User List method=============================");
         List user_list = userService.getAll();
-        ObjectMapper mapper = new ObjectMapper();
         model.addAttribute("newUser", new User());
         model.addAttribute("users", user_list);
         log.warning("Users: " + user_list.toString());
         log.warning("=========================END get User List method=============================");
         return "user";
     }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register(Model model) {
+        log.warning("=========================START register method=============================");
+        model.addAttribute("newUser", new User());
+        model.addAttribute("confPass", new String());
+        log.warning("=========================END register method=============================");
+        return Const.PAGE_USER_FAIL_LOGIN;
+    }
+
     @RequestMapping(value = "/mypage", method = RequestMethod.GET)
     public String getPersons(HttpSession session, Model model) {
         log.warning("=========================START To USER PAGE=============================");
         String id = (String) session.getAttribute("id_user");
-        User user = (null == id)  ? new User() : userService.findUserById(id);
-        if(null == id && null == user.getLogin()){
+        User user = (null == id) ? new User() : userService.findUserById(id);
+        if (null == id && null == user.getLogin()) {
             model.addAttribute("newUser", user);
             return Const.PAGE_MAIN;
-        } else{
+        } else {
             model.addAttribute("uzer", user);
             return Const.PAGE_USER_PAGE;
         }
     }
 
     @PostMapping("/login")
-    public String loginUser(HttpSession session,  Model model, @RequestParam("email") String email, @RequestParam("password") String password) {
+    public String loginUser(HttpSession session, Model model, @RequestParam("email") String email, @RequestParam("password") String password) {
         log.warning("=========================START Login=============================");
         String message = "";
         User user = userService.findUserByEmail(email);
@@ -66,6 +73,7 @@ public class UserController {
             return Const.PAGE_MAIN;
         } else if (!"".equals(message)) {
             model.addAttribute("newUser", new User());
+//            model.addAttribute("confPass", new String());
             log.warning("=========================Login Fail=============================");
             return Const.PAGE_USER_FAIL_LOGIN;
         } else {
@@ -76,24 +84,52 @@ public class UserController {
         }
     }
 
+    @Scope("session")
+    @Controller
+    public class LogoutController {
+
+        @PostMapping("/logout")
+        public String logout(HttpSession session) {
+            session.invalidate();
+            log.warning("=========================Logout Success=============================");
+            return Const.PAGE_MAIN;
+        }
+
+    }
+
     @PostMapping("/add")
-    public String greetingSubmit(Model model, @ModelAttribute User user) {
+    public String greetingSubmit(Model model, @RequestParam("name") String name,
+                                 @RequestParam("phone") String phone, @RequestParam("email") String email,
+                                 @RequestParam("status") String status, @RequestParam("country") String country,
+                                 @RequestParam("login") String login, @RequestParam("pass") String pass,
+                                 @RequestParam("confPass") String confPass) {
         String error;
+        //      here add new User and fill fields
+        User user = new User();
+        log.warning("---------------------START ADD USER METHOD----------------------");
+        log.warning("Income Params: " + name + ", " + phone + ", " + email + ", " + status
+                + ", " + country + ", " + login + ", " + pass + " Confirm password: " + confPass);
+        user.setName(name);
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setStatus(status);
+        user.setCountry(country);
+        user.setLogin(login);
+        user.setPass(pass);
+        error = checkPass(pass, confPass) ? Const.ERR_CONFIRM_PASS :
+                checkUser(user) ? Const.ERR_NOT_VALID_DATA :
+                        isUserEmail(user) ? Const.ERR_EMAIL_IS_BUSY :
+                                isUserLogin(user) ? Const.ERR_LOGIN_IS_BUSY : "";
         log.warning("Income user: " + user.toString());
-        log.warning("---------------------START ADD USER----------------------");
-        error = checkUser(user) ? Const.ERR_NOT_VALID_DATA :
-                isUserEmail(user) ? Const.ERR_EMAIL_IS_BUSY :
-                        isUserLogin(user) ? Const.ERR_LOGIN_IS_BUSY : "";
         model.addAttribute("mess", error);
         if (error.isEmpty()) {
             userService.addUser(user);
             model.addAttribute("uzer", user);
-        } else {
-            model.addAttribute("newUser", new User());
         }
-        log.warning("---------------------END ADD USER----------------------");
+        log.warning("---------------------END ADD USER METHOD----------------------");
         return error.isEmpty() ? Const.PAGE_USER_PAGE : Const.PAGE_USER_FAIL_LOGIN;
     }
+
 
     // Opening the edit user form page.
     @RequestMapping(value = "/edit/{idUser}/{phone}/{email}/{status}/{country}/{login}/{pass}", method = RequestMethod.GET)
@@ -140,13 +176,22 @@ public class UserController {
     }
 
     private boolean checkUser(User user) {
-     return user.getName() == null
+        return user.getName() == null
                 || user.getCountry().isEmpty()
                 || user.getEmail().isEmpty()
                 || user.getPhone().isEmpty()
                 || user.getStatus().isEmpty()
                 || user.getLogin().isEmpty()
                 || user.getPass().isEmpty();
+    }
+
+    private boolean checkPass(String pass, String confPass) {
+//       if(pass!=confPass){
+        if (pass.equals(confPass)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private boolean isUserLogin(User user) {

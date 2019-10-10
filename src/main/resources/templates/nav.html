@@ -8,6 +8,7 @@
 <div th:fragment="nav">
     <nav class="navbar navbar-default navbar-inverse" role="navigation">
         <div class="container-fluid">
+
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -19,7 +20,6 @@
                 </button>
                 <a class="navbar-brand" href="/user/mypage">Gallery</a>
             </div>
-
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
@@ -44,9 +44,22 @@
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
-                <ul class="nav navbar-nav navbar-left"><li><a th:text="${mess}"></a></li></ul>
+                <ul class="nav navbar-nav navbar-left"><li><!--/*@thymesVar id="mess" type=""*/-->
+                <a th:text="${mess}"></a></li></ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><p class="navbar-text">Already have an account?</p></li>
+                    <li>
+                        <a href="/user/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                    </li>
+                    <li>
+                        <p class="navbar-text">
+                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                            <input hidden type="submit" value="Sign Out"/>
+                        </form>
+                        <form class="col-md-12" action="/user/logout" th:method="post"></form>
+                        </p>
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span
                                 class="caret"></span></a>

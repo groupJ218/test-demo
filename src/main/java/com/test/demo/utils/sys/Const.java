@@ -7,6 +7,7 @@ public class Const {
     public static String ERR_LOGIN_IS_BUSY = "Login is busy";
     public static String ERR_NO_SUCH_USER = "no Such User";
     public static String ERR_WRONG_PASSWORD = "wrong password";
+    public static String ERR_CONFIRM_PASS = "wrong confirm password";
     // PAGES
     public static String PAGE_USER_PAGE = "userPage";
     public static String PAGE_MAIN = "index";
