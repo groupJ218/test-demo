@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
-<body>
 <div th:fragment="nav">
     <nav class="navbar navbar-default navbar-inverse" role="navigation">
         <div class="container-fluid">
@@ -44,8 +43,10 @@
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
-                <ul class="nav navbar-nav navbar-left"><li><!--/*@thymesVar id="mess" type=""*/-->
-                <a th:text="${mess}"></a></li></ul>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><!--/*@thymesVar id="mess" type=""*/-->
+                        <a th:text="${mess}"></a></li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><p class="navbar-text">Already have an account?</p></li>
                     <li>
@@ -53,11 +54,8 @@
                     </li>
                     <li>
                         <p class="navbar-text">
-                        <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                            <input hidden type="submit" value="Sign Out"/>
-                        </form>
-                        <form class="col-md-12" action="/user/logout" th:method="post"></form>
+                            <a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+                        <form name="logoutForm" th:action="@{/logout}" th:hidden="true"></form>
                         </p>
                     </li>
                     <li class="dropdown">
@@ -69,7 +67,7 @@
                                     <div class="col-md-12">
                                         <p>Enter Data:</p>
                                         <form class="col-md-12" action="/user/login" th:method="post">
-                                            <p>Email: <input class="form-control col-md-12" type="text" name="email"/>
+                                            <p>Email: <input class="form-control col-md-12 " type="text" name="email"/>
                                             </p>
                                             <p>Password: <input class="form-control col-md-12" type="text"
                                                                 name="password"/></p>
@@ -88,5 +86,5 @@
     </nav>
 </div>
 <div th:replace="jsScripts :: scripts"></div>
-</body>
+
 </html>

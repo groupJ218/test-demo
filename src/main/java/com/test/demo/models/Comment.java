@@ -5,10 +5,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+
 public class Comment implements Serializable {
+    private Logger log = Logger.getLogger(Comment.class.getName());
+
     public static final String CLASS_NAME = "comment";
     private String className;
     private String idComment;
@@ -78,12 +82,14 @@ public class Comment implements Serializable {
 
     public void setDate(String date) {
         Date dateTmp;
-        SimpleDateFormat dateForm = new SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy");
+        SimpleDateFormat dateForm = new SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy", new Locale("ua", "UA"));
+        log.warning("setDate: date -> " + date);
         try {
             dateTmp = dateForm.parse(date);
+            log.warning("setDate: dateTmp -> " + dateTmp);
             this.date = dateTmp;
         } catch (ParseException e) {
-            System.out.println("Parse exception!!!");
+            log.warning("setDate: ParseException -> " + e.toString());
         }
     }
 

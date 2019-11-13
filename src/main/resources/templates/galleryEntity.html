@@ -13,32 +13,26 @@
         <thead class="thead">
         <tr>
             <th>Gallery name</th>
+            <th>State</th>
             <th>Description</th>
-            <th>Id User</th>
-            <th>Gallery Id</th>
             <th>File</th>
         </tr>
         </thead>
         <tbody id="galleryEntity-table-body">
         <tr th:each="galleryEntity : ${gallery}">
             <td th:text="${galleryEntity.getGalleryName()}"></td>
+            <td th:text="${galleryEntity.getState()}"></td>
             <td th:text="${galleryEntity.getDescription()}"></td>
-            <td th:text="${galleryEntity.getIdUser()}"></td>
-            <td th:text="${galleryEntity.getIdGalEnt()}"></td>
             <td><img class="icon_img" th:src="@{'data:image/jpeg;base64,' + ${galleryEntity.getFile()}}"></td>
         </tr>
         </tbody>
     </table>
-</div>
-<div class="container">
-    <img alt="sample" th:src="@{/img.jpg}">
 </div>
 <div>
     <form enctype="multipart/form-data" class="col-md-4" action="#" th:action="@{add}" th:method="post">
         <p>File: <input class="form-control" type="file" name="file"/></p>
         <p>Gallery name: <input class="form-control" type="text" name="galleryName"/></p>
         <p>Description: <input class="form-control" type="text" name="description"/></p>
-        <p>Id User: <input class="form-control" type="text" name="idUser"/></p>
         <p><input class="btn btn-success" type="submit" value="Submit"/> <input class="btn btn-primary" type="reset"
                                                                                 value="Reset"/></p>
     </form>

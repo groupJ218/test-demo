@@ -18,4 +18,7 @@ public class Const {
     public  static String URL_GALLERY_LIST = "/gallery/list";
     // SERVICE
     public static String SERVICE_REDIRECT = "redirect:";
+    //STATE
+    public  static  String TRUE = "true";
+    public  static  String FALSE = "false";
 }

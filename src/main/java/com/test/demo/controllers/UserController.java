@@ -3,7 +3,6 @@ package com.test.demo.controllers;
 import com.test.demo.models.User;
 import com.test.demo.services.UserService;
 import com.test.demo.utils.sys.Const;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
 
 @Controller
 @RequestMapping("/user")
@@ -82,19 +82,6 @@ public class UserController {
             log.warning("=========================Login Success=============================");
             return Const.PAGE_USER_PAGE;
         }
-    }
-
-    @Scope("session")
-    @Controller
-    public class LogoutController {
-
-        @PostMapping("/logout")
-        public String logout(HttpSession session) {
-            session.invalidate();
-            log.warning("=========================Logout Success=============================");
-            return Const.PAGE_MAIN;
-        }
-
     }
 
     @PostMapping("/add")

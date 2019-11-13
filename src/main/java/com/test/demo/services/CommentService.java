@@ -30,7 +30,7 @@ public class CommentService {
         while (cursor.hasNext()) {
             Document doc = cursor.next();
             Comment comment = new Comment();
-            log.warning("!!!!!Document to String: " + doc.toString());
+//            log.warning("!!!!!Document to String: " + doc.toString());
             String classNameValue;
             try {
                 classNameValue = (String) doc.get("className");

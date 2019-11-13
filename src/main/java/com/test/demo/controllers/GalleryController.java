@@ -29,6 +29,7 @@ public class GalleryController {
     public String getPersons(HttpSession session,  Model model) {
         log.warning("---------------------START get Gallery LIST method----------------------");
         String id =(String) session.getAttribute("id_user");
+//        galleryService.getAll();
         List gall_list = galleryService.getAllById(id);
         model.addAttribute("newGall", new GalleryEntity());
         model.addAttribute("gallery", gall_list);
@@ -41,13 +42,19 @@ public class GalleryController {
     @PostMapping("/add")
     public String addGall(HttpSession session, @RequestParam("file") MultipartFile file, @RequestParam("galleryName") String galleryName,
                           @RequestParam("description") String description) {
-        String id = session.getAttribute("id_user").toString();
+
+        Object idObj = session.getAttribute("id_user");
+        if (idObj==null){
+            return Const.PAGE_MAIN;
+        }
+        String id = idObj.toString();
         log.warning("---------------------START ADD method----------------------");
         log.warning("Income Params: " + galleryName + ", " + description + ", " + id);
         GalleryEntity galleryEntity = new GalleryEntity();
         galleryEntity.setDescription(description);
         galleryEntity.setGalleryName(galleryName);
         galleryEntity.setIdUser(id);
+        galleryEntity.setState(Const.TRUE);
         try {
             galleryEntity.setFile(Base64.getEncoder().encodeToString(file.getBytes()));
         } catch (IOException e) {

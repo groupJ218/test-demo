@@ -11,6 +11,7 @@ public class GalleryEntity implements Serializable {
 
     public static final String CLASS_NAME= "gallery";
     private String file;
+    private String state;
     private String idUser;
     private String idGalEnt;
     private String className ;
@@ -22,15 +23,25 @@ public class GalleryEntity implements Serializable {
         this.idGalEnt = String.valueOf(UUID.randomUUID());
     }
 
-    public GalleryEntity(String idGalEnt, String  file, String galleryName, String description, String idUser) {
+    public GalleryEntity(String idGalEnt, String  file, String state, String galleryName, String description, String idUser) {
         super();
         this.className = CLASS_NAME;
         this.file = file;
+        this.state = state;
         this.idUser = idUser;
         this.idGalEnt = idGalEnt;
         this.className = CLASS_NAME;
         this.galleryName = galleryName;
         this.description = description;
+
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getClassName() {
