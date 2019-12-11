@@ -71,7 +71,6 @@ public class GalleryService {
         MongoCursor<Document> cursor = coll.find().iterator();
         while (cursor.hasNext()) {
             Document doc = cursor.next();
-            GalleryEntity galleryEntity = new GalleryEntity();
             String classNameValue;
             try {
                 classNameValue = (String) doc.get("className");
@@ -163,6 +162,31 @@ public class GalleryService {
         galleryEntity.setIdUser(doc.get("idUser").toString());
         return galleryEntity;
     }
+
+    public List getAllByState(String state) {
+        state="true";
+        List gallery_list = new ArrayList();
+        MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
+
+        //Fetching cursor object for iterating on the database records.
+        MongoCursor<Document> cursor = coll.find().iterator();
+        while (cursor.hasNext()) {
+            Document doc = cursor.next();
+            String classNameValue;
+            try {
+                classNameValue = (String) doc.get("className");
+            } catch (NullPointerException e) {
+                classNameValue = null;
+            }
+            if (!doc.isEmpty()
+                    && GalleryEntity.CLASS_NAME.equalsIgnoreCase(classNameValue)
+                    && (doc.get("state").toString().equals(state))) {
+                convertDocToGalleryList(gallery_list, doc);
+            }
+        }
+        return gallery_list;
+    }
+
 }
 
 

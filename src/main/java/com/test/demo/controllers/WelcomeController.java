@@ -1,6 +1,8 @@
 package com.test.demo.controllers;
 
+import com.test.demo.models.GalleryEntity;
 import com.test.demo.models.User;
+import com.test.demo.services.GalleryService;
 import com.test.demo.utils.sys.Const;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -8,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -23,7 +27,6 @@ public class WelcomeController {
     public String getLogin(Model model) {
         log.warning("=========================START Welcome getLogin=============================");
         model.addAttribute("loginUser", new User());
-
         log.warning("=========================END  Welcome getLogin=============================");
         return "index";
     }
@@ -32,17 +35,17 @@ public class WelcomeController {
     @GetMapping
     public String getPersons(Model model, HttpSession session) {
         log.warning("=========================START Welcome getPersons=============================");
-        session.setAttribute("isVisible",true);
+        session.setAttribute("isVisible", true);
 
         log.warning("=========================END  Welcome getPersons=============================");
         return "index";
     }
-//    @PostMapping("/logout")
+
+    //    @PostMapping("/logout")
     @GetMapping("logout")
     public String logout(HttpSession session) {
         session.invalidate();
         log.warning("=========================Logout Success=============================");
         return Const.PAGE_MAIN;
     }
-
 }
