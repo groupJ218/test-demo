@@ -37,19 +37,6 @@ public class GalleryController {
         log.warning("---------------------END get Gallery LIST method----------------------");
         return "galleryEntity";
     }
-//@RequestMapping(value = "/list", method = RequestMethod.GET)
-//public String getPersons(Model model) {
-//    log.warning("---------------------START get Gallery LIST method----------------------");
-//    String img = galleryService.findGallById("bda467e4-5ea7-4b78-b175-8f6972bd2b5e").getFile();
-//    log.warning("String img :" + img);
-//    List gall_list = galleryService.getAll();
-//    model.addAttribute("newGall", new GalleryEntity());
-//    model.addAttribute("image", "data:image/jpeg;base64,"+img);
-//    model.addAttribute("gallery", gall_list);
-//    log.warning("GalleryEntity" + gall_list.toString());
-//    log.warning("---------------------END get Gallery LIST method----------------------");
-//    return "galleryEntity";
-//}
 
     // Opening the add new gallery form page.
     @PostMapping("/add")
@@ -127,6 +114,6 @@ public class GalleryController {
         model.addAttribute("gallery", gall_list);
         log.warning("GalleryEntity" + gall_list.toString());
         log.warning("---------------------END get Gallery TRUE LIST method----------------------");
-        return "galleryEntity";
+        return "index";
     }
 }

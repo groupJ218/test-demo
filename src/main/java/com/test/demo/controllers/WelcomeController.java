@@ -36,9 +36,9 @@ public class WelcomeController {
     public String getPersons(Model model, HttpSession session) {
         log.warning("=========================START Welcome getPersons=============================");
         session.setAttribute("isVisible", true);
-
+        session.setAttribute("state", "true");
         log.warning("=========================END  Welcome getPersons=============================");
-        return "index";
+        return Const.SERVICE_REDIRECT + "/gallery/list_true";
     }
 
     //    @PostMapping("/logout")
