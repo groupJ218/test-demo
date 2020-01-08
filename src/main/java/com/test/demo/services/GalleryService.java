@@ -163,8 +163,8 @@ public class GalleryService {
         return galleryEntity;
     }
 
-    public List getAllByState(String state) {
-        state="true";
+    public List getAllByState() {
+        String state="true";
         List gallery_list = new ArrayList();
         MongoCollection<Document> coll = MongoFactory.getCollection(db_collection);
 
@@ -187,6 +187,20 @@ public class GalleryService {
         return gallery_list;
     }
 
+    public String getFirstId() {
+        List gallery_list = getAllByState();
+        GalleryEntity entity = (GalleryEntity) gallery_list.get(0);
+        log.warning(entity.getIdGalEnt());
+        return entity.getIdGalEnt();
+    }
+
+    public String getNextId(String totalId) {
+        List gallery_list = getAllByState();
+        for (int i = 0; i < gallery_list.size(); i++) {
+            log.warning("->" + gallery_list.size());
+        }
+        return  null;
+    }
 }
 
 

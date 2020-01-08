@@ -106,10 +106,22 @@ public class GalleryController {
 
     @RequestMapping(value = "/list_true", method = RequestMethod.GET)
     public String getListStateTrue(HttpSession session,  Model model) {
+        String imgId ;
+        try {
+            imgId = String.valueOf(session.getAttribute("img_id"));
+        } catch (NullPointerException ex ){
+            imgId = null;
+        }
+        if (imgId == null){
+            imgId =  galleryService.getFirstId();
+        } else {
+            imgId = galleryService.getNextId(imgId);
+        }
+
         log.warning("---------------------START get Gallery TRUE LIST method----------------------");
         String state =(String) session.getAttribute("state");
 //        galleryService.getAll();
-        List gall_list = galleryService.getAllByState(state);
+        List gall_list = galleryService.getAllByState();
         model.addAttribute("newGall", new GalleryEntity());
         model.addAttribute("gallery", gall_list);
         log.warning("GalleryEntity" + gall_list.toString());
